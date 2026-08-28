@@ -1,43 +1,187 @@
-Módulo 1: O Desafio Real (Contexto e Variáveis)
-Objetivo: Situar o usuário no problema e definir as fronteiras do sistema, sem exigir que ele escreva nada. É uma etapa de absorção e modelagem mental.
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudo de Caso: Compactação de Solo</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #27ae60;
+            --danger: #e74c3c;
+            --bg: #ecf0f1;
+            --text: #34495e;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 { color: var(--primary); }
+        h1 { border-bottom: 3px solid var(--secondary); padding-bottom: 10px; }
+        .module {
+            background: #fdfdfd;
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .module-2 { border-left-color: var(--secondary); }
+        .module-3 { border-left-color: #f39c12; }
+        .module-4 { border-left-color: var(--danger); }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th { background-color: var(--primary); color: white; }
+        
+        /* Simulator CSS */
+        .simulator-panel {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .slider-group { margin-bottom: 15px; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        input[type=range] { width: 100%; }
+        
+        .dashboard {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+        }
+        .metric { font-size: 1.2em; font-weight: bold; }
+        .status-box {
+            padding: 10px 20px;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+            background: var(--secondary);
+        }
+        
+        /* Forms */
+        textarea, input[type=text], select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background-color: #1a252f; }
+    </style>
+</head>
+<body>
 
-Narrativa do Problema: Apresente a dor no mundo real (ex: o colapso da barragem ou a perda de produtividade por compactação).
+<div class="container">
+    <h1>Análise de Risco Operacional</h1>
 
-O Diagrama do Sistema: Um esquema visual claro mostrando o que é o sistema e o que é o ambiente externo.
+    <div class="module module-1">
+        <h2>Módulo 1: O Desafio Real (Contexto e Variáveis)</h2>
+        <p><strong>A Dor no Mundo Real:</strong> Em operações agrícolas de larga escala, o tráfego contínuo de maquinário pesado gera um estresse mecânico severo no solo. Este fenômeno, conhecido como compactação, reduz a macroporosidade da terra, impedindo a infiltração de água e o crescimento do sistema radicular das culturas. O resultado? Queda drástica de produtividade e perda financeira.</p>
+        
+        <p><em>Fronteiras do Sistema:</em> Nosso sistema é delimitado pelo pneu da máquina (fonte de força) e a camada superficial do solo (receptor do estresse). O ambiente externo (clima, tipo de cultura) não será calculado neste momento.</p>
 
-Tabela de Variáveis: Uma matriz direta mapeando: Componente da Máquina/Estrutura -> Grandeza Física -> Papel no Sistema.
+        <h3>Tabela de Variáveis</h3>
+        <table>
+            <tr>
+                <th>Componente da Máquina/Estrutura</th>
+                <th>Grandeza Física</th>
+                <th>Papel no Sistema</th>
+            </tr>
+            <tr>
+                <td>Massa do Trator/Colheitadeira</td>
+                <td>Força Peso (kN)</td>
+                <td>Agente Causador (Gera a carga estática)</td>
+            </tr>
+            <tr>
+                <td>Pneu / Esteira</td>
+                <td>Área de Contato (m²)</td>
+                <td>Distribuidor de Carga (Dissipa a força)</td>
+            </tr>
+            <tr>
+                <td>Solo</td>
+                <td>Pressão Suportada (kPa)</td>
+                <td>Limiar de Resistência (Ponto de falha)</td>
+            </tr>
+        </table>
+    </div>
 
-O que eliminar: Retire todas as perguntas teóricas (ex: "Qual a diferença entre X e Y?"). O aluno deve apenas ler e entender as regras do jogo.
+    <div class="module module-2">
+        <h2>Módulo 2: O Painel de Controle (Experimentação Guiada)</h2>
+        <p><strong>Missão de Coleta:</strong> Mova a Massa da Máquina para 30 toneladas. O Limiar de Segurança do solo (fixado aqui em 150 kPa) foi rompido? Qual foi o valor exato da Pressão Transmitida no painel?</p>
+        
+        <div class="simulator-panel">
+            <div class="slider-group">
+                <label for="massSlider">Massa da Máquina: <span id="massVal">15</span> Toneladas</label>
+                <input type="range" id="massSlider" min="5" max="40" step="1" value="15">
+            </div>
+            
+            <div class="slider-group">
+                <label for="areaSlider">Área de Contato Total dos Pneus: <span id="areaVal">1.5</span> m²</label>
+                <input type="range" id="areaSlider" min="0.5" max="4" step="0.1" value="1.5">
+            </div>
 
-Módulo 2: O Painel de Controle (Experimentação Guiada)
-Objetivo: Interação pura. O aluno testa os limites físicos através do simulador e gera dados.
+            <div class="dashboard">
+                <div class="metric">Pressão Transmitida: <span id="pressureOut" style="color:var(--primary);">98.10</span> kPa</div>
+                <div class="status-box" id="statusIndicator">SEGURO</div>
+            </div>
+        </div>
+    </div>
 
-O Simulador: O código em Python com sliders e gráficos, exatamente como você já faz (esta é a joia da coroa).
+    <div class="module module-3">
+        <h2>Módulo 3: A Caixa Preta (Matemática e Análise Crítica)</h2>
+        <p>O motor sob o capô do simulador opera sob os princípios básicos da mecânica clássica:</p>
+        
+        <div style="background: #eee; padding: 15px; border-radius: 4px; font-family: monospace; text-align: center; margin-bottom: 15px;">
+            Força Peso (F) = Massa (m) * Gravidade (g)<br>
+            Pressão (P) = Força Peso (F) / Área de Contato (A)
+        </div>
 
-Roteiro de Testes (Pragmático): Em vez de perguntar "por que o dipolo se alinha?", você cria missões de coleta de dados.
+        <p><strong>Fluxograma de Causalidade:</strong> Aumento de Massa &rarr; Aumento de Força &rarr; <em>(Se Área constante)</em> &rarr; Aumento de Pressão &rarr; Rompimento do Limiar.</p>
 
-Exemplo de Missão: "Mova a Massa para 30 ton. O Limiar de Segurança foi rompido? Qual foi o valor exato da Pressão Transmitida no gráfico?"
+        <h3>Análise Crítica</h3>
+        <label for="criticalAnalysis">Considerando que nosso modelo assume um solo homogêneo, quais fatores dinâmicos do mundo real de uma lavoura poderiam agravar esse diagnóstico e que não aparecem neste simulador?</label>
+        <textarea id="criticalAnalysis" rows="4" placeholder="Escreva sua reflexão de engenharia aqui..."></textarea>
+    </div>
 
-O que eliminar: Questões discursivas longas. Substitua por tabelas ou campos curtos onde o aluno apenas registra os valores gerados no simulador antes e depois do colapso.
+    <div class="module module-4">
+        <h2>Módulo 4: O Laudo Executivo (Decisão Técnica)</h2>
+        <p><strong>Estudo de Caso (O Teste Cego):</strong> Uma colheitadeira de 28 toneladas operando com um conjunto de pneus cuja área total de contato é de apenas 1.2 m². O solo da região suporta no máximo 150 kPa antes da compactação severa. Vá ao simulador, insira estes dados e emita seu parecer.</p>
 
-Módulo 3: A Caixa Preta (Matemática e Análise Crítica)
-Objetivo: Mostrar o "motor sob o capô" e desenvolver o senso crítico do futuro profissional.
-
-Equações e Causalidade: Apresente as fórmulas e o fluxograma (A causa B que gera C). Novamente, material de consulta.
-
-A Única Pergunta do Módulo (Análise Crítica): Aqui você insere o desafio cognitivo de alto nível. Em vez de pedir para o aluno repetir as equações, pergunte sobre as falhas do modelo.
-
-Exemplo: "Considerando que nosso modelo assume um solo homogêneo, quais fatores dinâmicos do mundo real de uma lavoura poderiam agravar esse diagnóstico e que não aparecem neste simulador?" (Isso forma pensamento de engenharia).
-
-Módulo 4: O Laudo Executivo (Decisão Técnica)
-Objetivo: Sintetizar tudo em tomada de decisão. É aqui que o aluno prova que aprendeu.
-
-O Estudo de Caso (O Teste Cego): Entregue um cenário com parâmetros específicos (ex: Máquina X, Pneu Y, Umidade Z).
-
-O Formulário de Diagnóstico: O aluno vai ao simulador, roda os parâmetros e preenche um laudo estruturado, conciso e profissional, dividido apenas em três campos objetivos:
-
-Leitura de Dados: (Quais foram os números críticos encontrados no simulador?).
-
-Status Operacional: (Veto ou liberação? Estável ou Risco de Ruptura?).
-
-Recomendação Técnica de Mitigação: (O que fazer no mundo real para reverter o risco com base nos dados? Ex: "Recomenda-se reduzir a pressão de inflação dos pneus ou aguardar a redução da umidade do solo").
+        <h3>Formulário de Diagnóstico</h3>
+        <form onsubmit="event.preventDefault();
