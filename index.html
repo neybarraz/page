@@ -1,231 +1,43 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compactação Invisível do Solo: O Drama Mecânico</title>
-    <style>
-        :root {
-            --primary-color: #00E5A0;
-            --dark-bg: #1e1e1e;
-            --light-bg: #2d2d2d;
-            --text-color: #f5f5f5;
-            --border-color: #444;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-color);
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        h1, h2, h3 { color: var(--primary-color); }
-        h1 { border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; }
-        .module {
-            background-color: var(--light-bg);
-            border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 30px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        th, td {
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            text-align: left;
-        }
-        th { background-color: #3a3a3a; color: var(--primary-color); }
-        .btn-colab {
-            display: inline-block;
-            background-color: #F9AB00;
-            color: #1e1e1e;
-            padding: 15px 30px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1em;
-            border-radius: 5px;
-            margin: 20px 0;
-            text-align: center;
-            transition: background 0.3s;
-        }
-        .btn-colab:hover { background-color: #d89400; }
-        .mission-box {
-            background-color: #333;
-            border-left: 4px solid #F9AB00;
-            padding: 15px;
-            margin: 15px 0;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #CCFF00;
-        }
-        textarea, input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            border-radius: 4px;
-            border: 1px solid var(--border-color);
-            background-color: #1e1e1e;
-            color: #fff;
-            box-sizing: border-box;
-        }
-        .math-box {
-            background-color: #1e1e1e;
-            padding: 15px;
-            border-radius: 4px;
-            overflow-x: auto;
-            text-align: center;
-            font-size: 1.2em;
-        }
-        .image-placeholder {
-            width: 100%;
-            height: 200px;
-            background-color: #444;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #888;
-            border-radius: 4px;
-            margin: 20px 0;
-            border: 1px dashed #666;
-        }
-    </style>
-    <!-- Script para renderizar fórmulas matemáticas em LaTeX -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-</head>
-<body>
+Módulo 1: O Desafio Real (Contexto e Variáveis)
+Objetivo: Situar o usuário no problema e definir as fronteiras do sistema, sem exigir que ele escreva nada. É uma etapa de absorção e modelagem mental.
 
-<div class="container">
-    <h1>Diário de Bordo: Leis de Newton no Agronegócio</h1>
-    
-    <!-- MÓDULO 1 -->
-    <div class="module">
-        <h2>Módulo 1: O Desafio Real (Contexto e Variáveis)</h2>
-        <p><strong>A Dor Invisível:</strong> É uma tarde movimentada de safra. Uma colhedora com trinta toneladas avança sobre o terreno úmido. A superfície parece intacta, mas abaixo dela, um drama mecânico profundo está em andamento. A força aplicada supera a capacidade de suporte dos grãos do solo, colapsando os poros, expulsando o ar e criando uma barreira densa que limitará o crescimento das próximas safras e a infiltração de água.</p>
-        
-        <div class="image-placeholder">
-            [Inserir Imagem: Diagrama de Dispersão de Forças no Subsolo]
-        </div>
+Narrativa do Problema: Apresente a dor no mundo real (ex: o colapso da barragem ou a perda de produtividade por compactação).
 
-        <h3>As Variáveis do Sistema</h3>
-        <table>
-            <tr>
-                <th>Componente do Sistema</th>
-                <th>Grandeza Física (Leis de Newton)</th>
-                <th>Papel no Sistema Mecânico</th>
-            </tr>
-            <tr>
-                <td>Massa da Máquina</td>
-                <td>Força Peso Ativa (\(P = m \cdot g\))</td>
-                <td>Gera a carga vertical externa que solicita todo o sistema do solo.</td>
-            </tr>
-            <tr>
-                <td>Pneu / Rodado</td>
-                <td>Área de Contato (\(A\))</td>
-                <td>Modula a pressão (\(p = P/A\)). Controla como a força é distribuída na superfície.</td>
-            </tr>
-            <tr>
-                <td>Grãos do Solo</td>
-                <td>Atrito Estático / Ação e Reação</td>
-                <td>Oferece a força de resistência (\(F_{res}\)) e dispersa a força externa grão a grão.</td>
-            </tr>
-            <tr>
-                <td>Umidade (Água)</td>
-                <td>Lubrificante Intergranular</td>
-                <td>Modula o atrito máximo. Excesso de água reduz a sustentação drásticamente.</td>
-            </tr>
-        </table>
-    </div>
+O Diagrama do Sistema: Um esquema visual claro mostrando o que é o sistema e o que é o ambiente externo.
 
-    <!-- MÓDULO 2 -->
-    <div class="module">
-        <h2>Módulo 2: O Painel de Controle (Experimentação Guiada)</h2>
-        <p>Agora você é o operador e o perito. Utilize o simulador para testar os limites físicos da máquina no solo.</p>
-        
-        <a href="LINK_DO_SEU_COLAB_AQUI" target="_blank" class="btn-colab">🔬 Acessar Simulador no Google Colab</a>
+Tabela de Variáveis: Uma matriz direta mapeando: Componente da Máquina/Estrutura -> Grandeza Física -> Papel no Sistema.
 
-        <h3>Missões de Coleta de Dados</h3>
-        
-        <div class="mission-box">
-            <strong>Missão 1: O Peso Ativo (2ª Lei de Newton)</strong><br>
-            No simulador, fixe a <em>Área em 0.25 m²</em>, <em>Umidade Ótima</em> e <em>Profundidade em 25 cm</em>.<br>
-            Altere a Massa de 4 ton para 36 ton. Anote o valor exato em que o Fator de Segurança (FS) fica abaixo de 1.00.
-            <div style="margin-top: 10px;">
-                <input type="text" placeholder="Ex: Ocorreu o colapso (FS < 1) com XX toneladas...">
-            </div>
-        </div>
+O que eliminar: Retire todas as perguntas teóricas (ex: "Qual a diferença entre X e Y?"). O aluno deve apenas ler e entender as regras do jogo.
 
-        <div class="mission-box">
-            <strong>Missão 2: O Efeito da Lubrificação (Atrito)</strong><br>
-            Configure: <em>Massa = 16 ton</em>, <em>Área = 0.30 m²</em>. Teste no estado <em>Seco</em> e depois mude para <em>Saturado</em>.<br>
-            Qual foi o valor da "Resistência de Atrito" (kPa) em ambos os cenários?
-            <div style="margin-top: 10px;">
-                <input type="text" placeholder="Atrito Seco: ___ kPa | Atrito Saturado: ___ kPa">
-            </div>
-        </div>
-    </div>
+Módulo 2: O Painel de Controle (Experimentação Guiada)
+Objetivo: Interação pura. O aluno testa os limites físicos através do simulador e gera dados.
 
-    <!-- MÓDULO 3 -->
-    <div class="module">
-        <h2>Módulo 3: A Caixa Preta (Matemática e Análise Crítica)</h2>
-        <p>Abaixo, a cadeia de causalidade mecânica que rege o simulador:</p>
-        
-        <div class="math-box">
-            $$ \text{Massa } (m) \xrightarrow{P = mg} \text{Pressão } (p) \xrightarrow{\text{3ª Lei}} F_{\text{aplicada}}(z) $$
-            $$ FS = \frac{F_{\text{res}}}{F_{\text{aplicada}}} $$
-        </div>
+O Simulador: O código em Python com sliders e gráficos, exatamente como você já faz (esta é a joia da coroa).
 
-        <div class="form-group" style="margin-top: 20px;">
-            <label>Desafio de Engenharia (Análise Crítica):</label>
-            <p style="font-size: 0.9em; color: #ccc;">Nosso simulador assume que o solo é um bloco homogêneo e que a máquina aplica apenas uma força vertical "quase-estática". Pensando no mundo real de uma lavoura, quais fatores dinâmicos (como o movimento da roda ou número de passadas) agravariam esse diagnóstico e que estão invisíveis no código matemático atual?</p>
-            <textarea rows="4" placeholder="Sua análise crítica estruturada aqui..."></textarea>
-        </div>
-    </div>
+Roteiro de Testes (Pragmático): Em vez de perguntar "por que o dipolo se alinha?", você cria missões de coleta de dados.
 
-    <!-- MÓDULO 4 -->
-    <div class="module">
-        <h2>Módulo 4: O Laudo Executivo (Decisão Técnica)</h2>
-        
-        <div style="background-color: #2a2a2a; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
-            <strong>O Estudo de Caso (O Teste Cego):</strong><br>
-            Você foi chamado a uma fazenda no Sul. Janela de colheita. Terreno <em>Muito Úmido / Saturado</em>. Colhedora de <em>28 toneladas</em> sobre rodados de <em>0.20 m²</em>. Analisando a <em>25 cm</em> de profundidade no simulador, emita seu parecer:
-        </div>
+Exemplo de Missão: "Mova a Massa para 30 ton. O Limiar de Segurança foi rompido? Qual foi o valor exato da Pressão Transmitida no gráfico?"
 
-        <div class="form-group">
-            <label>1. Leitura de Dados Periciais:</label>
-            <textarea rows="2" placeholder="Registre o Esforço Aplicado (kPa), Resistência (kPa) e o Fator de Segurança (FS) extraídos do simulador..."></textarea>
-        </div>
+O que eliminar: Questões discursivas longas. Substitua por tabelas ou campos curtos onde o aluno apenas registra os valores gerados no simulador antes e depois do colapso.
 
-        <div class="form-group">
-            <label>2. Status Operacional:</label>
-            <textarea rows="2" placeholder="Veto à operação ou liberação? Existe risco de quebra do equilíbrio estático?"></textarea>
-        </div>
+Módulo 3: A Caixa Preta (Matemática e Análise Crítica)
+Objetivo: Mostrar o "motor sob o capô" e desenvolver o senso crítico do futuro profissional.
 
-        <div class="form-group">
-            <label>3. Recomendação Técnica de Mitigação:</label>
-            <textarea rows="3" placeholder="O que o produtor deve fazer fisicamente (alterar máquina ou esperar ambiente) para reverter o risco?"></textarea>
-        </div>
-        
-        <button style="background-color: var(--primary-color); color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 4px;">Salvar Laudo Executivo</button>
-    </div>
+Equações e Causalidade: Apresente as fórmulas e o fluxograma (A causa B que gera C). Novamente, material de consulta.
 
-</div>
+A Única Pergunta do Módulo (Análise Crítica): Aqui você insere o desafio cognitivo de alto nível. Em vez de pedir para o aluno repetir as equações, pergunte sobre as falhas do modelo.
 
-</body>
-</html>
+Exemplo: "Considerando que nosso modelo assume um solo homogêneo, quais fatores dinâmicos do mundo real de uma lavoura poderiam agravar esse diagnóstico e que não aparecem neste simulador?" (Isso forma pensamento de engenharia).
+
+Módulo 4: O Laudo Executivo (Decisão Técnica)
+Objetivo: Sintetizar tudo em tomada de decisão. É aqui que o aluno prova que aprendeu.
+
+O Estudo de Caso (O Teste Cego): Entregue um cenário com parâmetros específicos (ex: Máquina X, Pneu Y, Umidade Z).
+
+O Formulário de Diagnóstico: O aluno vai ao simulador, roda os parâmetros e preenche um laudo estruturado, conciso e profissional, dividido apenas em três campos objetivos:
+
+Leitura de Dados: (Quais foram os números críticos encontrados no simulador?).
+
+Status Operacional: (Veto ou liberação? Estável ou Risco de Ruptura?).
+
+Recomendação Técnica de Mitigação: (O que fazer no mundo real para reverter o risco com base nos dados? Ex: "Recomenda-se reduzir a pressão de inflação dos pneus ou aguardar a redução da umidade do solo").
