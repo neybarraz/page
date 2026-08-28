@@ -46,10 +46,10 @@
         <!-- Hero da Página -->
         <div class="space-y-4">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
-                ● Estrutura em 4 Módulos
+                ● Física Geral
             </div>
             <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-                Design Instrucional para Engenharia & Tomada de Decisão
+                Pivô Central em Aclive: Análise de Potência, Sobrecarga e Desalinhamento
             </h1>
             <p class="text-slate-400 text-base sm:text-lg leading-relaxed max-w-3xl">
                 Metodologia orientada à resolução de problemas reais através de simulação física, análise crítica de modelos e emissão de laudos técnicos executivos.
@@ -57,6 +57,132 @@
         </div>
 
         <!-- MÓDULO 1 -->
+
+        <section class="bg-slate-900/60 rounded-2xl border border-slate-800 p-6 sm:p-8 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-5">
+                <div>
+                    <span class="text-xs font-bold text-brand-500 uppercase tracking-wider">Módulo 01</span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 mt-1">
+                        <i data-lucide="compass" class="w-6 h-6 text-brand-500"></i>
+                        O Desafio Real (Contexto e Variáveis)
+                    </h2>
+                </div>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-800 text-slate-300 text-xs font-medium w-fit">
+                    <i data-lucide="eye" class="w-3.5 h-3.5 text-brand-500"></i> Absorção e Modelagem Mental
+                </span>
+            </div>
+
+            <!-- Objetivo -->
+            <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800/80">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Objetivo Pedagógico</p>
+                <p class="text-sm text-slate-200">
+                    Situar o usuário no problema e definir as fronteiras do sistema, sem exigir que ele escreva nada. É uma etapa de absorção e modelagem mental.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Narrativa do Problema -->
+                <div class="bg-slate-900 rounded-xl border border-slate-800 p-5 space-y-3">
+                    <div class="flex items-center gap-2 text-white font-semibold text-sm">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i>
+                        Narrativa do Problema: O Gigante na Colina
+                    </div>
+                    <div class="text-xs text-slate-400 leading-relaxed space-y-2">
+                        <p>
+                            Em uma extensa lavoura de topografia ondulada, um sistema de irrigação por pivô central avança lentamente. Quando as torres intermediárias começam a subir uma colina íngreme, um drama energético invisível toma conta da estrutura.
+                        </p>
+                        <p>
+                            Para vencer a rampa, os motoredutores precisam realizar um <strong>Trabalho Mecânico</strong> brutal contra a gravidade, convertendo <strong>Energia Elétrica</strong> em energia cinética e <strong>Energia Potencial Gravitacional</strong>. Se a inclinação for severa, a torre perde velocidade e atrasa. A treliça metálica se curva, gerando forças laterais massivas. O motor atinge seu limite de <strong>Potência</strong>, podendo causar superaquecimento ou a torção irreversível da estrutura.
+                        </p>
+                        <ul class="list-disc pl-4 text-slate-500 mt-2 space-y-1">
+                            <li><em>Referência de Vídeo 1: "Pivô central atolado/desalinhado subindo rampa" (foco nas rodas cavando o solo e curvatura da tubulação).</em></li>
+                            <li><em>Referência de Vídeo 2: "Queda de torre de pivô central" (cenário pós-falha com liberação violenta de energia elástica).</em></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Diagrama do Sistema -->
+                <div class="bg-slate-900 rounded-xl border border-slate-800 p-5 space-y-3">
+                    <div class="flex items-center gap-2 text-white font-semibold text-sm">
+                        <i data-lucide="layout-grid" class="w-4 h-4 text-brand-500"></i>
+                        O Diagrama do Sistema: Delimitando as Fronteiras
+                    </div>
+                    <div class="text-xs text-slate-400 leading-relaxed space-y-2">
+                        <p>
+                            Neste estudo, nosso Volume de Controle (as fronteiras do nosso sistema) não será a lavoura inteira, mas sim isolado em <strong>uma única torre de tração</strong> e as <strong>duas treliças adjacentes</strong> a ela durante a subida de uma encosta.
+                        </p>
+                        <div class="p-3 border border-dashed border-slate-700 rounded-lg bg-slate-800/50 text-center mt-3">
+                            <p class="italic text-slate-500">
+                                [Inserir Imagem 1: Diagrama 2D de uma torre de pivô subindo uma encosta com ângulo $\theta$. Destaque em caixa tracejada vermelha ao redor das rodas e do motor (Volume de Controle). Vetores: Peso ($P$), componente na rampa ($P_x$), e Tração Estrutural ($T$) lateral simulando o desalinhamento. Ícone de raio no motor (Energia Elétrica) e setas circulares nas rodas (Trabalho).]
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Variáveis -->
+            <div class="space-y-3">
+                <h3 class="text-sm font-semibold text-white flex items-center gap-2">
+                    <i data-lucide="table" class="w-4 h-4 text-brand-500"></i>
+                    Desmontagem Físico-Energética (Tabela de Variáveis)
+                </h3>
+                <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/60">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-900 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
+                            <tr>
+                                <th class="py-3 px-4 w-1/4">Componente da Estrutura</th>
+                                <th class="py-3 px-4 w-1/4">Grandeza Física</th>
+                                <th class="py-3 px-4 w-2/4">Papel no Sistema (O que faz?)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/60">
+                            <tr>
+                                <td class="py-3 px-4 font-medium text-white">Massa da Torre + Água ($m$)</td>
+                                <td class="py-3 px-4 font-mono text-emerald-400">Energia Potencial Gravitacional<br>$E_p = m \cdot g \cdot h$</td>
+                                <td class="py-3 px-4 text-slate-400"><strong>A "Carga" a ser vencida:</strong> Massa morta que o sistema precisa elevar. Quanto mais íngreme a colina ($h$), mais energia exige.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-medium text-white">Pneus / Deslocamento na Rampa ($\Delta s$)</td>
+                                <td class="py-3 px-4 font-mono text-emerald-400">Trabalho Mecânico<br>$W = F \cdot \Delta s$</td>
+                                <td class="py-3 px-4 text-slate-400"><strong>A Execução do Esforço:</strong> Quantifica o esforço total para mover a estrutura morro acima contra o peso e o atrito.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-medium text-white">Treliça Metálica / Vão (Desalinhado)</td>
+                                <td class="py-3 px-4 font-mono text-emerald-400">Energia Elástica<br>$W_{el\acute{a}stica}$</td>
+                                <td class="py-3 px-4 text-slate-400"><strong>O "Ladrão" de Energia:</strong> A tubulação curva como uma mola, roubando energia mecânica e gerando força de arrasto lateral.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-medium text-white">Motoredutor (Fonte de Tração)</td>
+                                <td class="py-3 px-4 font-mono text-emerald-400">Potência Mecânica e Elétrica<br>$Pot = \frac{W}{\Delta t}$ e $P_{el\acute{e}t} = V \cdot I$</td>
+                                <td class="py-3 px-4 text-slate-400"><strong>A Fonte de Ação:</strong> Converte energia elétrica em mecânica. Sua potência define o quão rápido realiza o trabalho.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-medium text-white">Painel de Controle / Relé</td>
+                                <td class="py-3 px-4 font-mono text-emerald-400">Árbitro do Desalinhamento<br>(Sensor de ângulo $\theta$)</td>
+                                <td class="py-3 px-4 text-slate-400"><strong>O Limitador de Segurança:</strong> Corta a energia elétrica se o atraso estrutural passar do limite crítico, evitando rupturas.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- O que eliminar -->
+            <div class="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-300 flex items-start gap-3">
+                <i data-lucide="ban" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i>
+                <div>
+                    <span class="font-bold text-rose-200">O que eliminar nesta etapa:</span> Retire todas as perguntas teóricas (ex: "Qual a diferença entre X e Y?"). O aluno deve apenas ler e compreender as regras do jogo.
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+
+
+
+        
         <section class="bg-slate-900/60 rounded-2xl border border-slate-800 p-6 sm:p-8 space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-5">
                 <div>
