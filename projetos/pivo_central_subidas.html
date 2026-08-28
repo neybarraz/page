@@ -3,16 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Braço Robótico Articulado 6-DOF | Detalhes do Projeto</title>
+    <title>Framework Metodológico | Simulação e Tomada de Decisão</title>
     
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        brand: { 500: '#0284c7', 600: '#0369a1' }
+                        brand: {
+                            500: '#0284c7',
+                            600: '#0369a1',
+                        }
                     }
                 }
             }
@@ -21,94 +27,338 @@
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white">
 
+    <!-- Header / Barra Superior -->
     <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="../index.html" class="inline-flex items-center gap-2 text-sm font-medium text-slate-300 hover:text-white transition">
+            <a href="index.html" class="inline-flex items-center gap-2 text-sm font-medium text-slate-300 hover:text-white transition">
                 <i data-lucide="arrow-left" class="w-4 h-4 text-brand-500"></i>
-                Voltar para o Portfólio
+                Voltar ao Portfólio
             </a>
-            <div class="flex items-center gap-3">
-                <a href="https://github.com" target="_blank" class="text-xs px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:text-white flex items-center gap-1.5">
-                    <i data-lucide="github" class="w-3.5 h-3.5"></i> Ver no GitHub
-                </a>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-500 text-xs font-semibold">
+                <i data-lucide="layers" class="w-3.5 h-3.5"></i> Arquitetura Pedagógica
             </div>
         </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-6 py-12 space-y-10">
+    <!-- Conteúdo Principal -->
+    <main class="max-w-5xl mx-auto px-6 py-12 space-y-12">
         
+        <!-- Hero da Página -->
         <div class="space-y-4">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
-                ● Projeto Concluído
+                ● Estrutura em 4 Módulos
             </div>
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-white">Braço Robótico Articulado 6-DOF</h1>
-            <p class="text-slate-400 text-lg leading-relaxed">
-                Desenvolvimento completo de um manipulador robótico de seis graus de liberdade para automação de processos industriais, com cinemática inversa e controle visual.
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                Design Instrucional para Engenharia & Tomada de Decisão
+            </h1>
+            <p class="text-slate-400 text-base sm:text-lg leading-relaxed max-w-3xl">
+                Metodologia orientada à resolução de problemas reais através de simulação física, análise crítica de modelos e emissão de laudos técnicos executivos.
             </p>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-xl bg-slate-900 border border-slate-800 text-sm">
-            <div>
-                <span class="text-slate-400 text-xs block">Linguagens</span>
-                <span class="font-semibold text-white">Python, C++</span>
+        <!-- MÓDULO 1 -->
+        <section class="bg-slate-900/60 rounded-2xl border border-slate-800 p-6 sm:p-8 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-5">
+                <div>
+                    <span class="text-xs font-bold text-brand-500 uppercase tracking-wider">Etapa 01</span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 mt-1">
+                        <i data-lucide="compass" class="w-6 h-6 text-brand-500"></i>
+                        Módulo 1: O Desafio Real (Contexto e Variáveis)
+                    </h2>
+                </div>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-800 text-slate-300 text-xs font-medium w-fit">
+                    <i data-lucide="eye" class="w-3.5 h-3.5 text-brand-500"></i> Absorção e Modelagem Mental
+                </span>
             </div>
-            <div>
-                <span class="text-slate-400 text-xs block">Frameworks</span>
-                <span class="font-semibold text-white">ROS2, OpenCV</span>
-            </div>
-            <div>
-                <span class="text-slate-400 text-xs block">Hardware</span>
-                <span class="font-semibold text-white">Servos Digitais / ESP32</span>
-            </div>
-            <div>
-                <span class="text-slate-400 text-xs block">Graus de Liberdade</span>
-                <span class="font-semibold text-white">6 DOF + Garra</span>
-            </div>
-        </div>
 
-        <div class="aspect-video w-full rounded-2xl bg-slate-900 border border-slate-800 flex flex-col items-center justify-center text-slate-400 p-6 text-center">
-            <i data-lucide="image" class="w-12 h-12 text-slate-700 mb-2"></i>
-            <p class="text-sm">Espaço para foto do protótipo físico, render 3D ou vídeo do YouTube incorporado.</p>
-            <span class="text-xs text-slate-400 mt-1">(Adicione a tag &lt;img src="../assets/braco.jpg"&gt; aqui)</span>
-        </div>
+            <!-- Objetivo -->
+            <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800/80">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Objetivo Pedagógico</p>
+                <p class="text-sm text-slate-200">
+                    Situar o usuário no problema e definir as fronteiras do sistema, sem exigir que ele escreva nada. É uma etapa de absorção e modelagem mental.
+                </p>
+            </div>
 
-        <section class="space-y-4">
-            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-                <i data-lucide="layers" class="text-brand-500 w-5 h-5"></i>
-                Descrição Técnica
-            </h2>
-            <p class="text-slate-300 leading-relaxed">
-                O manipulador foi projetado com foco em tarefas de <em>Pick and Place</em> de precisão. A estrutura mecânica foi construída em liga de alumínio e peças impressas em 3D (PETG).
-            </p>
-            <p class="text-slate-300 leading-relaxed">
-                A câmera acoplada no punho do robô captura o fluxo de vídeo a 60 FPS. Um modelo de visão computacional identifica coordenadas espaciais das peças, convertendo pixels em coordenadas cartesianas no espaço tridimensional.
-            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Narrativa do Problema -->
+                <div class="bg-slate-900 rounded-xl border border-slate-800 p-5 space-y-2">
+                    <div class="flex items-center gap-2 text-white font-semibold text-sm">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i>
+                        Narrativa do Problema
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Apresente a dor no mundo real (ex: o colapso da barragem ou a perda de produtividade por compactação excessiva do solo).
+                    </p>
+                </div>
+
+                <!-- Diagrama do Sistema -->
+                <div class="bg-slate-900 rounded-xl border border-slate-800 p-5 space-y-2">
+                    <div class="flex items-center gap-2 text-white font-semibold text-sm">
+                        <i data-lucide="layout-grid" class="w-4 h-4 text-brand-500"></i>
+                        O Diagrama do Sistema
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Um esquema visual claro delimitando o que compõe o sistema estudado e quais elementos pertencem ao ambiente externo.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Tabela de Variáveis -->
+            <div class="space-y-3">
+                <h3 class="text-sm font-semibold text-white flex items-center gap-2">
+                    <i data-lucide="table" class="w-4 h-4 text-brand-500"></i>
+                    Tabela de Variáveis (Matriz de Mapeamento Direto)
+                </h3>
+                <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/60">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-900 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
+                            <tr>
+                                <th class="py-3 px-4">Componente da Máquina / Estrutura</th>
+                                <th class="py-3 px-4">Grandeza Física</th>
+                                <th class="py-3 px-4">Papel no Sistema</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/60">
+                            <tr>
+                                <td class="py-3 px-4 font-medium text-white">Chassi / Carga Útil</td>
+                                <td class="py-3 px-4">Massa Total ($M$) [kg]</td>
+                                <td class="py-3 px-4 text-slate-400">Geração de força peso normal sobre o solo</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-medium text-white">Pneumático / Rodado</td>
+                                <td class="py-3 px-4">Área de Contato ($A$) [$\text{m}^2$]</td>
+                                <td class="py-3 px-4 text-slate-400">Distribuição superficial da tensão mecânica</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-medium text-white">Matriz do Solo</td>
+                                <td class="py-3 px-4">Pressão de Pré-Consolidação ($\sigma_p$) [kPa]</td>
+                                <td class="py-3 px-4 text-slate-400">Limiar de suporte sem deformação plástica irreversível</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- O que eliminar -->
+            <div class="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-300 flex items-start gap-3">
+                <i data-lucide="ban" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i>
+                <div>
+                    <span class="font-bold text-rose-200">O que eliminar nesta etapa:</span> Retire todas as perguntas teóricas (ex: "Qual a diferença entre X e Y?"). O aluno deve apenas ler e compreender as regras do jogo.
+                </div>
+            </div>
         </section>
 
-        <section class="space-y-4">
-            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-                <i data-lucide="check-circle" class="text-brand-500 w-5 h-5"></i>
-                Funcionalidades Implementadas
-            </h2>
-            <ul class="list-disc list-inside space-y-2 text-slate-300">
-                <li>Resolução de <strong>Cinemática Inversa</strong> analítica e numérica em tempo real.</li>
-                <li>Algoritmo de <strong>planejamento de trajetória suave</strong> com curvas de Bezier para evitar solavancos.</li>
-                <li>Comunicação via protocolo serial determinístico e interface web para controle manual.</li>
-                <li>Sistema de parada de emergência e limitação de corrente por junta.</li>
-            </ul>
+        <!-- MÓDULO 2 -->
+        <section class="bg-slate-900/60 rounded-2xl border border-slate-800 p-6 sm:p-8 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-5">
+                <div>
+                    <span class="text-xs font-bold text-brand-500 uppercase tracking-wider">Etapa 02</span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 mt-1">
+                        <i data-lucide="sliders" class="w-6 h-6 text-brand-500"></i>
+                        Módulo 2: O Painel de Controle (Experimentação Guiada)
+                    </h2>
+                </div>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-800 text-slate-300 text-xs font-medium w-fit">
+                    <i data-lucide="play" class="w-3.5 h-3.5 text-brand-500"></i> Interação Pura & Coleta de Dados
+                </span>
+            </div>
+
+            <!-- Objetivo -->
+            <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800/80">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Objetivo Pedagógico</p>
+                <p class="text-sm text-slate-200">
+                    Interação pura. O aluno testa os limites físicos através do simulador e gera dados experimentais.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- O Simulador -->
+                <div class="bg-slate-900 rounded-xl border border-slate-800 p-5 space-y-2">
+                    <div class="flex items-center gap-2 text-white font-semibold text-sm">
+                        <i data-lucide="terminal" class="w-4 h-4 text-brand-500"></i>
+                        O Simulador (A Joia da Coroa)
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Código computacional com sliders interativos e gráficos de resposta imediata para manipulação de variáveis independentes.
+                    </p>
+                </div>
+
+                <!-- Roteiro de Testes -->
+                <div class="bg-slate-900 rounded-xl border border-slate-800 p-5 space-y-2">
+                    <div class="flex items-center gap-2 text-white font-semibold text-sm">
+                        <i data-lucide="target" class="w-4 h-4 text-emerald-400"></i>
+                        Roteiro de Testes (Pragmático)
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Em vez de perguntar "por que o dipolo se alinha?", estabeleça missões objetivas com metas de coleta e verificação de dados.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Exemplo de Missão -->
+            <div class="p-4 rounded-xl bg-slate-950 border border-brand-500/30 space-y-2">
+                <div class="flex items-center gap-2 text-brand-500 text-xs font-bold uppercase tracking-wider">
+                    <i data-lucide="zap" class="w-3.5 h-3.5"></i> Exemplo de Missão Prática
+                </div>
+                <p class="text-xs sm:text-sm text-slate-200 italic">
+                    "Mova a Massa para 30 ton. O Limiar de Segurança foi rompido? Qual foi o valor exato da Pressão Transmitida no gráfico?"
+                </p>
+            </div>
+
+            <!-- O que eliminar -->
+            <div class="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-300 flex items-start gap-3">
+                <i data-lucide="ban" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i>
+                <div>
+                    <span class="font-bold text-rose-200">O que eliminar nesta etapa:</span> Questões discursivas longas. Substitua por tabelas ou campos curtos onde o aluno apenas registra os valores gerados no simulador antes e depois do ponto crítico/colapso.
+                </div>
+            </div>
         </section>
 
-        <div class="pt-6 border-t border-slate-900 flex flex-wrap gap-4">
-            <a href="https://github.com" target="_blank" class="px-5 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-medium text-sm transition flex items-center gap-2">
-                <i data-lucide="file-code" class="w-4 h-4"></i> Código-Fonte (GitHub)
-            </a>
-            <a href="#" class="px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 font-medium text-sm transition flex items-center gap-2">
-                <i data-lucide="file-text" class="w-4 h-4"></i> Download do Artigo / Relatório (PDF)
-            </a>
-        </div>
+        <!-- MÓDULO 3 -->
+        <section class="bg-slate-900/60 rounded-2xl border border-slate-800 p-6 sm:p-8 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-5">
+                <div>
+                    <span class="text-xs font-bold text-brand-500 uppercase tracking-wider">Etapa 03</span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 mt-1">
+                        <i data-lucide="cpu" class="w-6 h-6 text-brand-500"></i>
+                        Módulo 3: A Caixa Preta (Matemática e Análise Crítica)
+                    </h2>
+                </div>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-800 text-slate-300 text-xs font-medium w-fit">
+                    <i data-lucide="brain" class="w-3.5 h-3.5 text-brand-500"></i> Motor Sob o Capô & Pensamento Crítico
+                </span>
+            </div>
+
+            <!-- Objetivo -->
+            <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800/80">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Objetivo Pedagógico</p>
+                <p class="text-sm text-slate-200">
+                    Mostrar o "motor sob o capô" e desenvolver o senso crítico e as capacidades analíticas do futuro profissional.
+                </p>
+            </div>
+
+            <!-- Equações e Causalidade -->
+            <div class="space-y-3">
+                <h3 class="text-sm font-semibold text-white flex items-center gap-2">
+                    <i data-lucide="git-branch" class="w-4 h-4 text-brand-500"></i>
+                    Equações e Causalidade (Material de Consulta)
+                </h3>
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-1 bg-brand-500/10 text-brand-500 border border-brand-500/20 rounded font-mono text-xs">Causa A</span>
+                        <span class="text-slate-500 text-xs">gera</span>
+                        <span class="px-2.5 py-1 bg-brand-500/10 text-brand-500 border border-brand-500/20 rounded font-mono text-xs">Efeito B</span>
+                        <span class="text-slate-500 text-xs">que resulta em</span>
+                        <span class="px-2.5 py-1 bg-brand-500/10 text-brand-500 border border-brand-500/20 rounded font-mono text-xs">Impacto C</span>
+                    </div>
+                    <span class="text-xs text-slate-400">Apresentação das equações governantes como consulta contínua.</span>
+                </div>
+            </div>
+
+            <!-- A Única Pergunta do Módulo -->
+            <div class="bg-slate-900 rounded-xl border border-slate-800 p-5 space-y-3">
+                <div class="flex items-center gap-2 text-white font-semibold text-sm">
+                    <i data-lucide="help-circle" class="w-4 h-4 text-brand-500"></i>
+                    A Única Pergunta do Módulo (Desafio Cognitivo de Alto Nível)
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Em vez de pedir para o aluno repetir as equações conhecidas, questione sobre os limites e as falhas intrínsecas do modelo simplificado.
+                </p>
+                <div class="p-4 rounded-lg bg-slate-950 border border-slate-800 text-xs text-slate-300 italic border-l-4 border-l-brand-500">
+                    "Considerando que nosso modelo assume um solo homogêneo, quais fatores dinâmicos do mundo real de uma lavoura poderiam agravar esse diagnóstico e que não aparecem neste simulador?"
+                </div>
+            </div>
+        </section>
+
+        <!-- MÓDULO 4 -->
+        <section class="bg-slate-900/60 rounded-2xl border border-slate-800 p-6 sm:p-8 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-5">
+                <div>
+                    <span class="text-xs font-bold text-brand-500 uppercase tracking-wider">Etapa 04</span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 mt-1">
+                        <i data-lucide="file-check" class="w-6 h-6 text-brand-500"></i>
+                        Módulo 4: O Laudo Executivo (Decisão Técnica)
+                    </h2>
+                </div>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-800 text-slate-300 text-xs font-medium w-fit">
+                    <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i> Tomada de Decisão & Síntese
+                </span>
+            </div>
+
+            <!-- Objetivo -->
+            <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800/80">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Objetivo Pedagógico</p>
+                <p class="text-sm text-slate-200">
+                    Sintetizar tudo em tomada de decisão aplicada. É aqui que o aluno consolida e demonstra a retenção do aprendizado.
+                </p>
+            </div>
+
+            <!-- O Estudo de Caso -->
+            <div class="bg-slate-900 rounded-xl border border-slate-800 p-5 space-y-2">
+                <div class="flex items-center gap-2 text-white font-semibold text-sm">
+                    <i data-lucide="briefcase" class="w-4 h-4 text-brand-500"></i>
+                    O Estudo de Caso (O Teste Cego)
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Entrega de um cenário de campo com parâmetros específicos (ex: Máquina X, Pneu Y, Umidade Z) para simulação e parecer técnico.
+                </p>
+            </div>
+
+            <!-- O Formulário de Diagnóstico -->
+            <div class="space-y-4">
+                <h3 class="text-sm font-semibold text-white flex items-center gap-2">
+                    <i data-lucide="clipboard-list" class="w-4 h-4 text-brand-500"></i>
+                    O Formulário de Diagnóstico (3 Campos Objetivos)
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Campo 1 -->
+                    <div class="bg-slate-950 rounded-xl border border-slate-800 p-4 space-y-2">
+                        <div class="flex items-center gap-2 text-xs font-bold text-white">
+                            <span class="w-5 h-5 rounded-full bg-slate-800 text-brand-500 flex items-center justify-center text-[10px]">1</span>
+                            Leitura de Dados
+                        </div>
+                        <p class="text-xs text-slate-400">
+                            Quais foram os números críticos encontrados e computados no simulador?
+                        </p>
+                    </div>
+
+                    <!-- Campo 2 -->
+                    <div class="bg-slate-950 rounded-xl border border-slate-800 p-4 space-y-2">
+                        <div class="flex items-center gap-2 text-xs font-bold text-white">
+                            <span class="w-5 h-5 rounded-full bg-slate-800 text-brand-500 flex items-center justify-center text-[10px]">2</span>
+                            Status Operacional
+                        </div>
+                        <p class="text-xs text-slate-400">
+                            Veto ou liberação operacional? Estado Estável ou Risco Iminente de Ruptura?
+                        </p>
+                    </div>
+
+                    <!-- Campo 3 -->
+                    <div class="bg-slate-950 rounded-xl border border-slate-800 p-4 space-y-2">
+                        <div class="flex items-center gap-2 text-xs font-bold text-white">
+                            <span class="w-5 h-5 rounded-full bg-slate-800 text-brand-500 flex items-center justify-center text-[10px]">3</span>
+                            Recomendação de Mitigação
+                        </div>
+                        <p class="text-xs text-slate-400">
+                            Ações práticas no mundo real (ex: ajustar calibragem ou aguardar janela de umidade).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
     </main>
 
+    <!-- Rodapé -->
+    <footer class="border-t border-slate-900 bg-slate-950 py-8 px-6">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+            <span>Framework Pedagógico para Simulação Computacional</span>
+            <span>&copy; 2026 Todos os direitos reservados.</span>
+        </div>
+    </footer>
+
+    <!-- Inicialização dos Ícones -->
     <script>
         lucide.createIcons();
     </script>
