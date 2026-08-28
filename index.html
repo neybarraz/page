@@ -1,187 +1,339 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estudo de Caso: Compactação de Solo</title>
-    <style>
-        :root {
-            --primary: #2c3e50;
-            --secondary: #27ae60;
-            --danger: #e74c3c;
-            --bg: #ecf0f1;
-            --text: #34495e;
+    <title>Portfólio Acadêmico & Profissional</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
         }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text);
-            background-color: var(--bg);
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 900px;
-            margin: auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        h1, h2, h3 { color: var(--primary); }
-        h1 { border-bottom: 3px solid var(--secondary); padding-bottom: 10px; }
-        .module {
-            background: #fdfdfd;
-            border-left: 5px solid var(--primary);
-            padding: 20px;
-            margin-bottom: 30px;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .module-2 { border-left-color: var(--secondary); }
-        .module-3 { border-left-color: #f39c12; }
-        .module-4 { border-left-color: var(--danger); }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-        th { background-color: var(--primary); color: white; }
-        
-        /* Simulator CSS */
-        .simulator-panel {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-        .slider-group { margin-bottom: 15px; }
-        label { font-weight: bold; display: block; margin-bottom: 5px; }
-        input[type=range] { width: 100%; }
-        
-        .dashboard {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-            padding: 20px;
-            background: #fff;
-            border: 2px solid var(--primary);
-            border-radius: 8px;
-        }
-        .metric { font-size: 1.2em; font-weight: bold; }
-        .status-box {
-            padding: 10px 20px;
-            border-radius: 4px;
-            color: white;
-            font-weight: bold;
-            background: var(--secondary);
-        }
-        
-        /* Forms */
-        textarea, input[type=text], select {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: var(--primary);
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover { background-color: #1a252f; }
-    </style>
+    </script>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white">
 
-<div class="container">
-    <h1>Análise de Risco Operacional</h1>
+    <header class="fixed top-0 left-0 w-full bg-slate-950/80 backdrop-blur-md border-b border-slate-800 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="#inicio" class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                <i data-lucide="cpu" class="w-5 h-5 text-brand-500"></i>
+                <span>Prof. <span class="text-brand-500">Seu Nome</span></span>
+            </a>
+            
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+                <a href="#inicio" class="hover:text-white transition">Início</a>
+                <a href="#disciplinas" class="hover:text-white transition">Disciplinas</a>
+                <a href="#pesquisa" class="hover:text-white transition">Pesquisa</a>
+                <a href="#robotica" class="hover:text-white transition">Robótica</a>
+                <a href="#contato" class="hover:text-white transition">Contato</a>
+            </nav>
 
-    <div class="module module-1">
-        <h2>Módulo 1: O Desafio Real (Contexto e Variáveis)</h2>
-        <p><strong>A Dor no Mundo Real:</strong> Em operações agrícolas de larga escala, o tráfego contínuo de maquinário pesado gera um estresse mecânico severo no solo. Este fenômeno, conhecido como compactação, reduz a macroporosidade da terra, impedindo a infiltração de água e o crescimento do sistema radicular das culturas. O resultado? Queda drástica de produtividade e perda financeira.</p>
-        
-        <p><em>Fronteiras do Sistema:</em> Nosso sistema é delimitado pelo pneu da máquina (fonte de força) e a camada superficial do solo (receptor do estresse). O ambiente externo (clima, tipo de cultura) não será calculado neste momento.</p>
+            <div class="flex items-center gap-3">
+                <a href="https://github.com" target="_blank" class="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white transition">
+                    <i data-lucide="github" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+    </header>
 
-        <h3>Tabela de Variáveis</h3>
-        <table>
-            <tr>
-                <th>Componente da Máquina/Estrutura</th>
-                <th>Grandeza Física</th>
-                <th>Papel no Sistema</th>
-            </tr>
-            <tr>
-                <td>Massa do Trator/Colheitadeira</td>
-                <td>Força Peso (kN)</td>
-                <td>Agente Causador (Gera a carga estática)</td>
-            </tr>
-            <tr>
-                <td>Pneu / Esteira</td>
-                <td>Área de Contato (m²)</td>
-                <td>Distribuidor de Carga (Dissipa a força)</td>
-            </tr>
-            <tr>
-                <td>Solo</td>
-                <td>Pressão Suportada (kPa)</td>
-                <td>Limiar de Resistência (Ponto de falha)</td>
-            </tr>
-        </table>
-    </div>
+    <section id="inicio" class="pt-32 pb-20 px-6 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
+        <div class="flex-1 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-500 text-xs font-semibold uppercase tracking-wider">
+                <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                Docência & Pesquisa Aplicada
+            </div>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
+                Engenharia, Computação & Robótica Autônoma.
+            </h1>
+            <p class="text-slate-400 text-base sm:text-lg leading-relaxed max-w-2xl">
+                Espaço dedicado à divulgação de material didático, linhas de pesquisa científica, orientações e projetos de desenvolvimento em robótica e automação.
+            </p>
+            <div class="flex flex-wrap gap-4 pt-2">
+                <a href="#disciplinas" class="px-5 py-3 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-medium text-sm transition flex items-center gap-2 shadow-lg shadow-brand-500/20">
+                    <i data-lucide="book-open" class="w-4 h-4"></i> Ver Disciplinas
+                </a>
+                <a href="#robotica" class="px-5 py-3 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 font-medium text-sm transition flex items-center gap-2">
+                    <i data-lucide="bot" class="w-4 h-4"></i> Projetos de Robótica
+                </a>
+            </div>
+        </div>
 
-    <div class="module module-2">
-        <h2>Módulo 2: O Painel de Controle (Experimentação Guiada)</h2>
-        <p><strong>Missão de Coleta:</strong> Mova a Massa da Máquina para 30 toneladas. O Limiar de Segurança do solo (fixado aqui em 150 kPa) foi rompido? Qual foi o valor exato da Pressão Transmitida no painel?</p>
-        
-        <div class="simulator-panel">
-            <div class="slider-group">
-                <label for="massSlider">Massa da Máquina: <span id="massVal">15</span> Toneladas</label>
-                <input type="range" id="massSlider" min="5" max="40" step="1" value="15">
+        <div class="w-full md:w-80 flex justify-center">
+            <div class="relative w-64 h-64 rounded-2xl p-1 bg-gradient-to-tr from-brand-500 to-slate-800 shadow-2xl">
+                <div class="w-full h-full bg-slate-900 rounded-2xl flex flex-col items-center justify-center text-center p-6 border border-slate-800">
+                    <div class="w-24 h-24 rounded-full bg-slate-800 flex items-center justify-center mb-4 text-brand-500">
+                        <i data-lucide="user" class="w-12 h-12"></i>
+                    </div>
+                    <h3 class="font-bold text-white">Seu Nome Aqui</h3>
+                    <p class="text-xs text-slate-400 mt-1">Docente & Pesquisador</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="disciplinas" class="py-20 bg-slate-900/50 border-t border-slate-900 px-6">
+        <div class="max-w-7xl mx-auto space-y-12">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <h2 class="text-3xl font-bold text-white flex items-center justify-center gap-3">
+                    <i data-lucide="graduation-cap" class="text-brand-500"></i> Disciplinas Ministradas
+                </h2>
+                <p class="text-slate-400 text-sm">Planos de ensino, ementas, materiais didáticos e atividades laboratoriais.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 hover:border-brand-500/50 transition">
+                    <span class="text-xs font-semibold text-brand-500 bg-brand-500/10 px-2.5 py-1 rounded">DISC01</span>
+                    <h3 class="text-lg font-bold text-white mt-3">Algoritmos e Estruturas de Dados</h3>
+                    <p class="text-sm text-slate-400 mt-2">Lógica de programação, ponteiros, listas encadeadas, árvores e análise de complexidade assintótica.</p>
+                </div>
+                <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 hover:border-brand-500/50 transition">
+                    <span class="text-xs font-semibold text-brand-500 bg-brand-500/10 px-2.5 py-1 rounded">DISC02</span>
+                    <h3 class="text-lg font-bold text-white mt-3">Sistemas Embarcados</h3>
+                    <p class="text-sm text-slate-400 mt-2">Arquitetura ARM, microcontroladores, periféricos (ADC, PWM, Timers) e protocolos I2C/SPI/UART.</p>
+                </div>
+                <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 hover:border-brand-500/50 transition">
+                    <span class="text-xs font-semibold text-brand-500 bg-brand-500/10 px-2.5 py-1 rounded">DISC03</span>
+                    <h3 class="text-lg font-bold text-white mt-3">Robótica Móvel Autônoma</h3>
+                    <p class="text-sm text-slate-400 mt-2">Cinemática de robôs móveis, odometria, sensores LiDAR/Ultrassom e introdução a algoritmos SLAM.</p>
+                </div>
+                <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 hover:border-brand-500/50 transition">
+                    <span class="text-xs font-semibold text-brand-500 bg-brand-500/10 px-2.5 py-1 rounded">DISC04</span>
+                    <h3 class="text-lg font-bold text-white mt-3">Controle e Automação Industrial</h3>
+                    <p class="text-sm text-slate-400 mt-2">Modelagem de sistemas dinâmicos, controle clássico (PID), resposta em frequência e estabilidade.</p>
+                </div>
+                <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 hover:border-brand-500/50 transition">
+                    <span class="text-xs font-semibold text-brand-500 bg-brand-500/10 px-2.5 py-1 rounded">DISC05</span>
+                    <h3 class="text-lg font-bold text-white mt-3">Inteligência Artificial Aplicada</h3>
+                    <p class="text-sm text-slate-400 mt-2">Redes neurais artificiais, aprendizado por reforço, algoritmos genéticos e inferência em tempo real.</p>
+                </div>
+                <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 hover:border-brand-500/50 transition">
+                    <span class="text-xs font-semibold text-brand-500 bg-brand-500/10 px-2.5 py-1 rounded">DISC06</span>
+                    <h3 class="text-lg font-bold text-white mt-3">Visão Computacional</h3>
+                    <p class="text-sm text-slate-400 mt-2">Processamento digital de imagens, filtros espaciais, detecção de bordas, OpenCV e segmentação.</p>
+                </div>
+                <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 hover:border-brand-500/50 transition">
+                    <span class="text-xs font-semibold text-brand-500 bg-brand-500/10 px-2.5 py-1 rounded">DISC07</span>
+                    <h3 class="text-lg font-bold text-white mt-3">Internet das Coisas (IoT)</h3>
+                    <p class="text-sm text-slate-400 mt-2">Protocolos de comunicação IoT (MQTT, CoAP), plataformas em nuvem e nós sensores de baixo consumo.</p>
+                </div>
+                <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 hover:border-brand-500/50 transition">
+                    <span class="text-xs font-semibold text-brand-500 bg-brand-500/10 px-2.5 py-1 rounded">DISC08</span>
+                    <h3 class="text-lg font-bold text-white mt-3">Sistemas Operacionais de Tempo Real (RTOS)</h3>
+                    <p class="text-sm text-slate-400 mt-2">Escalonamento determinístico, semáforos, mutexes, filas e desenvolvimento multitarefa com FreeRTOS.</p>
+                </div>
+                <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 hover:border-brand-500/50 transition">
+                    <span class="text-xs font-semibold text-brand-500 bg-brand-500/10 px-2.5 py-1 rounded">DISC09</span>
+                    <h3 class="text-lg font-bold text-white mt-3">Redes de Comunicação Industrial</h3>
+                    <p class="text-sm text-slate-400 mt-2">Barramento CAN, Modbus TCP/RTU, Profinet e arquiteturas de integração chão de fábrica-TI.</p>
+                </div>
+                <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 hover:border-brand-500/50 transition">
+                    <span class="text-xs font-semibold text-brand-500 bg-brand-500/10 px-2.5 py-1 rounded">DISC10</span>
+                    <h3 class="text-lg font-bold text-white mt-3">Metodologia e Projetos Tecnológicos</h3>
+                    <p class="text-sm text-slate-400 mt-2">Redação científica, elaboração de patentes, design thinking e desenvolvimento de projetos de engenharia.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pesquisa" class="py-20 px-6 max-w-7xl mx-auto space-y-12">
+        <div class="text-center max-w-2xl mx-auto space-y-3">
+            <h2 class="text-3xl font-bold text-white flex items-center justify-center gap-3">
+                <i data-lucide="flask-conical" class="text-brand-500"></i> Linhas de Pesquisa
+            </h2>
+            <p class="text-slate-400 text-sm">Produção científica, frentes de investigação e parcerias acadêmicas.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-slate-900/60 p-6 rounded-xl border border-slate-800">
+                <div class="w-10 h-10 rounded-lg bg-brand-500/10 text-brand-500 flex items-center justify-center mb-4">
+                    <i data-lucide="radar" class="w-5 h-5"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Navegação e Autonomia</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    Pesquisa focada em algoritmos de fusão sensorial (Filtro de Kalman estendido), localização e mapeamento simultâneo (SLAM) em ambientes não estruturados.
+                </p>
+            </div>
+            <div class="bg-slate-900/60 p-6 rounded-xl border border-slate-800">
+                <div class="w-10 h-10 rounded-lg bg-brand-500/10 text-brand-500 flex items-center justify-center mb-4">
+                    <i data-lucide="brain-circuit" class="w-5 h-5"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Edge AI & Embarcados</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    Otimização e quantização de modelos de Redes Neurais Convolucionais para execução em tempo real em hardware de baixíssimo consumo energético.
+                </p>
+            </div>
+            <div class="bg-slate-900/60 p-6 rounded-xl border border-slate-800">
+                <div class="w-10 h-10 rounded-lg bg-brand-500/10 text-brand-500 flex items-center justify-center mb-4">
+                    <i data-lucide="network" class="w-5 h-5"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Robótica Cooperativa (Swarms)</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    Estudo de controle distribuído e inteligência coletiva para múltiplos agentes robóticos autônomos operando em coordenação espacial.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="robotica" class="py-20 bg-slate-900/50 border-t border-slate-900 px-6">
+        <div class="max-w-7xl mx-auto space-y-12">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <h2 class="text-3xl font-bold text-white flex items-center justify-center gap-3">
+                    <i data-lucide="bot" class="text-brand-500"></i> Projetos de Robótica
+                </h2>
+                <p class="text-slate-400 text-sm">Protótipos desenvolvidos, sistemas de controle, hardware e software de código aberto.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden flex flex-col justify-between p-6">
+                    <div>
+                        <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
+                            <span class="text-emerald-400 font-medium">● Concluído</span>
+                            <span>ROS2 / C++</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">1. Veículo Autônomo AGV para Logística</h3>
+                        <p class="text-sm text-slate-400">Robô diferencial projetado para transporte de cargas internas utilizando navegação por marcos visuais e odometria de alta precisão.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden flex flex-col justify-between p-6">
+                    <div>
+                        <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
+                            <span class="text-emerald-400 font-medium">● Concluído</span>
+                            <span>Python / OpenCV</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">2. Braço Robótico Articulado 6-DOF</h3>
+                        <p class="text-sm text-slate-400">Manipulador com cinemática inversa analítica, garras intercambiáveis e sistema de triagem de peças via visão computacional.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden flex flex-col justify-between p-6">
+                    <div>
+                        <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
+                            <span class="text-amber-400 font-medium">● Em Desenvolvimento</span>
+                            <span>LiDAR / Cartographer</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">3. Plataforma SLAM 2D/3D com LiDAR</h3>
+                        <p class="text-sm text-slate-400">Sistema embarcado para mapeamento tridimensional de interiores e desvio dinâmico de obstáculos em tempo real.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden flex flex-col justify-between p-6">
+                    <div>
+                        <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
+                            <span class="text-emerald-400 font-medium">● Concluído</span>
+                            <span>Mecanum / FreeRTOS</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">4. Base Móvel Omnidirecional</h3>
+                        <p class="text-sm text-slate-400">Chassi equipado com rodas Mecanum de 4 motores com controle vetorial de velocidade e aceleração.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden flex flex-col justify-between p-6">
+                    <div>
+                        <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
+                            <span class="text-emerald-400 font-medium">● Concluído</span>
+                            <span>PID / IMU 6 Eixos</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">5. Robô Auto-Equilibrável (Self-Balancing)</h3>
+                        <p class="text-sm text-slate-400">Pêndulo invertido móvel estabilizado através de fusão sensorial (Acelerômetro + Giroscópio) e controle PID digital.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden flex flex-col justify-between p-6">
+                    <div>
+                        <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
+                            <span class="text-amber-400 font-medium">● Em Desenvolvimento</span>
+                            <span>PX4 / MavLink</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">6. Drone Autônomo de Inspeção</h3>
+                        <p class="text-sm text-slate-400">Quadricóptero configurado com piloto automático PX4 para missões programadas de telemetria e inspeção de estruturas.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden flex flex-col justify-between p-6">
+                    <div>
+                        <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
+                            <span class="text-emerald-400 font-medium">● Concluído</span>
+                            <span>ESP32 / BLE</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">7. Robô Seguidor de Linha de Competição</h3>
+                        <p class="text-sm text-slate-400">Protótipo de alto desempenho com barra de sensores ópticos e turbina de sucção para máxima aderência em curvas.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden flex flex-col justify-between p-6">
+                    <div>
+                        <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
+                            <span class="text-amber-400 font-medium">● Em Desenvolvimento</span>
+                            <span>EMG / Servomotores</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">8. Prótese Biomecânica Mioelétrica</h3>
+                        <p class="text-sm text-slate-400">Mão robótica articulada impressa em 3D controlada por sinais eletromiográficos (EMG) captados na superfície muscular.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden flex flex-col justify-between p-6">
+                    <div>
+                        <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
+                            <span class="text-emerald-400 font-medium">● Concluído</span>
+                            <span>ESP-NOW / Swarm</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">9. Enxame de Microrrobôs Cooperativos</h3>
+                        <p class="text-sm text-slate-400">Plataforma experimental com cinco unidades robóticas móveis operando em rede sem fio para tarefas colaborativas.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden flex flex-col justify-between p-6">
+                    <div>
+                        <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
+                            <span class="text-emerald-400 font-medium">● Concluído</span>
+                            <span>WebSockets / WebRTC</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">10. Estação de Teleoperação Remota Web</h3>
+                        <p class="text-sm text-slate-400">Interface web em tempo real para controle remoto de veículos terrestres com transmissão de vídeo de baixa latência.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contato" class="py-12 border-t border-slate-900 bg-slate-950 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-center md:text-left">
+                <p class="text-white font-semibold">Contato Profissional & Acadêmico</p>
+                <p class="text-slate-400 text-sm mt-1">seu.email@instituicao.edu.br</p>
             </div>
             
-            <div class="slider-group">
-                <label for="areaSlider">Área de Contato Total dos Pneus: <span id="areaVal">1.5</span> m²</label>
-                <input type="range" id="areaSlider" min="0.5" max="4" step="0.1" value="1.5">
-            </div>
-
-            <div class="dashboard">
-                <div class="metric">Pressão Transmitida: <span id="pressureOut" style="color:var(--primary);">98.10</span> kPa</div>
-                <div class="status-box" id="statusIndicator">SEGURO</div>
+            <div class="flex items-center gap-4 text-slate-400">
+                <a href="https://github.com" target="_blank" class="hover:text-white transition">GitHub</a>
+                <span>•</span>
+                <a href="https://linkedin.com" target="_blank" class="hover:text-white transition">LinkedIn</a>
+                <span>•</span>
+                <a href="http://lattes.cnpq.br" target="_blank" class="hover:text-white transition">Currículo Lattes</a>
             </div>
         </div>
-    </div>
-
-    <div class="module module-3">
-        <h2>Módulo 3: A Caixa Preta (Matemática e Análise Crítica)</h2>
-        <p>O motor sob o capô do simulador opera sob os princípios básicos da mecânica clássica:</p>
-        
-        <div style="background: #eee; padding: 15px; border-radius: 4px; font-family: monospace; text-align: center; margin-bottom: 15px;">
-            Força Peso (F) = Massa (m) * Gravidade (g)<br>
-            Pressão (P) = Força Peso (F) / Área de Contato (A)
+        <div class="text-center text-xs text-slate-600 mt-8">
+            &copy; 2026 Todos os direitos reservados.
         </div>
+    </footer>
 
-        <p><strong>Fluxograma de Causalidade:</strong> Aumento de Massa &rarr; Aumento de Força &rarr; <em>(Se Área constante)</em> &rarr; Aumento de Pressão &rarr; Rompimento do Limiar.</p>
-
-        <h3>Análise Crítica</h3>
-        <label for="criticalAnalysis">Considerando que nosso modelo assume um solo homogêneo, quais fatores dinâmicos do mundo real de uma lavoura poderiam agravar esse diagnóstico e que não aparecem neste simulador?</label>
-        <textarea id="criticalAnalysis" rows="4" placeholder="Escreva sua reflexão de engenharia aqui..."></textarea>
-    </div>
-
-    <div class="module module-4">
-        <h2>Módulo 4: O Laudo Executivo (Decisão Técnica)</h2>
-        <p><strong>Estudo de Caso (O Teste Cego):</strong> Uma colheitadeira de 28 toneladas operando com um conjunto de pneus cuja área total de contato é de apenas 1.2 m². O solo da região suporta no máximo 150 kPa antes da compactação severa. Vá ao simulador, insira estes dados e emita seu parecer.</p>
-
-        <h3>Formulário de Diagnóstico</h3>
-        <form onsubmit="event.preventDefault();
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
