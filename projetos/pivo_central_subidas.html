@@ -3,22 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Framework Metodológico | Simulação e Tomada de Decisão</title>
+    <title>Parecer Técnico - Investigação Eletrodinâmica</title>
     
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
+    <!-- Fontes do Google: Merriweather (Textos Oficiais) e Fira Code (Valores e Campos) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: {
+                        serif: ['Merriweather', 'serif'],
+                        mono: ['Fira Code', 'monospace'],
+                        sans: ['system-ui', 'sans-serif'],
+                    },
                     colors: {
-                        brand: {
-                            500: '#0284c7',
-                            600: '#0369a1',
-                        }
+                        brand: { 500: '#0284c7', 600: '#0369a1', 700: '#0369a1' }
                     }
                 }
             }
@@ -27,876 +34,1239 @@
 
     <!-- CSS do KaTeX -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    
-    <!-- JS do KaTeX e extensão de renderização automática -->
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
         onload="renderMathInElement(document.body, {
-            delimiters: [
-                {left: '$$', right: '$$', display: true},
-                {left: '$', right: '$', display: false}
-            ]
+            delimiters: [ {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false} ]
         });">
     </script>
-    
+
+    <!-- ====================================================================== -->
+    <!-- MOTOR WYSIWYG: DOSSIÊ NA TELA, FORMULÁRIO LIMPO NO PDF                 -->
+    <!-- ====================================================================== -->
+    <style>
+        /* Fundo do navegador simulando a mesa de trabalho */
+        body { background-color: #f3f4f6; }
+
+        /* 1. O FORMATO DA FOLHA A4 NA TELA */
+        .folha-a4 {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm 15mm;
+            margin: 2rem auto;
+            background-color: white;
+            color: #0f172a;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            position: relative;
+            box-sizing: border-box;
+            line-height: 1.6;
+        }
+
+        p, li { font-size: 10.5pt; text-align: justify; }
+        h1, h2, h3, h4 { font-family: sans-serif; color: #0f172a; }
+
+        /* Caixas de preenchimento do aluno */
+        .campo-preenchimento {
+            font-family: 'Fira Code', monospace !important;
+            font-size: 9.5pt !important;
+            background-color: #f8fafc;
+            border: 1px solid #94a3b8;
+            color: #000;
+            resize: none;
+            width: 100%;
+        }
+        .campo-preenchimento:focus { border-color: #0284c7; outline: none; background-color: #eff6ff; }
+
+        /* Tabelas */
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 9.5pt; }
+        th, td { border: 1px solid #cbd5e1; padding: 10px; vertical-align: top; }
+        th { background-color: #f1f5f9; font-family: sans-serif; text-transform: uppercase; font-size: 8pt; letter-spacing: 0.5px; }
+
+        /* 2. REGRAS MÁGICAS DA IMPRESSORA (CRIA O PDF) */
+        @media print {
+            @page { margin: 15mm; size: A4 portrait; }
+            body { background-color: white; }
+            
+            .folha-a4 {
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+                width: 100%;
+                page-break-after: always; /* Garante que cada .folha-a4 puxe um papel novo */
+                break-after: page;
+            }
+            
+            /* Oculta botões e vídeos no papel */
+            .esconder-na-impressao { display: none !important; }
+            
+            /* Formatação forçada para garantir contraste da tinta */
+            .campo-preenchimento { border-color: #000 !important; background-color: #fff !important; }
+            th { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+            /* TRAVA DE SEGURANÇA DA MATRIZ DE IMAGENS NO PDF */
+            .matriz-midia {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 10px !important;
+            }
+            .matriz-midia .box-imagem {
+                height: 4.5cm !important; /* Limita a altura física no papel */
+                border: 1px solid #cbd5e1 !important;
+            }
+            .matriz-midia img { object-fit: cover !important; width: 100% !important; height: 100% !important; }
+        }
+
+        /* Evitar cortes feios no meio da tabela ou de textos */
+        .evitar-quebra, tr, label { page-break-inside: avoid !important; break-inside: avoid !important; }
+
+        /* 3. RESPONSIVIDADE PARA CELULAR */
+        @media (max-width: 850px) {
+            .folha-a4 { width: 100%; min-height: auto; margin: 0; padding: 5vw; box-shadow: none; }
+            body { background-color: white; }
+        }
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white">
+<body class="font-serif antialiased">
 
-    <!-- Header / Barra Superior -->
-    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="https://neybarraz.github.io/page/index.html" class="inline-flex items-center gap-2 text-sm font-medium text-slate-300 hover:text-white transition">
-                <i data-lucide="arrow-left" class="w-4 h-4 text-brand-500"></i>
-                Voltar ao Portfólio
-            </a>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-500 text-xs font-semibold">
-                <i data-lucide="layers" class="w-3.5 h-3.5"></i> Física Geral
-            </div>
-        </div>
-    </header>
+    <!-- ====================================================================== -->
+    <!-- PAINEL FLUTUANTE DE BOTÕES (Apenas Tela)                               -->
+    <!-- ====================================================================== -->
+     
+     
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 esconder-na-impressao">
+        <!-- Botão Voltar -->
+        <a href="https://neybarraz.github.io/page/index.html" title="Voltar ao Portfólio" class="flex items-center justify-center w-12 h-12 bg-slate-800 border border-slate-700 hover:bg-slate-700 text-white rounded-full shadow-lg transition-transform transform hover:scale-105 ml-auto">
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+        </a>
+        <!-- Botão Imprimir -->
+        <button onclick="window.print()" class="flex items-center gap-2 px-6 py-3 bg-brand-600 hover:bg-brand-500 text-white font-sans text-sm font-bold rounded-full shadow-2xl transition-transform transform hover:scale-105">
+            <i data-lucide="printer" class="w-5 h-5"></i> Imprimir Parecer Técnico
+        </button>
+    </div>
 
-    <!-- Conteúdo Principal -->
-    <main class="max-w-5xl mx-auto px-6 py-12 space-y-12">
-        
-        <!-- Hero da Página -->
-        <div class="space-y-4">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
-                ● Física Geral
-            </div>
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-                Pivô Central em Aclive
-            </h1>
-            <p class="text-slate-400 text-base sm:text-lg leading-relaxed max-w-3xl">
-                Metodologia orientada à resolução de problemas reais através de simulação física, 
-                análise crítica de modelos e emissão de laudos técnicos executivos.
-            </p>
-        </div>
-
-        <!-- ---------------------------------------------------------------------------------------------------- -->
-        <!-- MÓDULO 1 -->
-        <section class="bg-slate-900/60 rounded-2xl border border-slate-800 p-6 sm:p-8 space-y-6">
-            <!-- Cabeçalho do Módulo -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-5">
-                <div>
-                    <span class="text-xs font-bold text-brand-500 uppercase tracking-wider">Módulo 01</span>
-                    <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 mt-1">
-                        <i data-lucide="compass" class="w-6 h-6 text-brand-500"></i>
-                        Desafio Real
-                    </h2>
-                </div>
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-800 text-slate-300 text-xs font-medium w-fit">
-                    <i data-lucide="eye" class="w-3.5 h-3.5 text-brand-500"></i> Absorção e Modelagem Mental
-                </span>
-            </div>
-        
-            <!-- Problema Real: Narrativa -->
-            <h3 class="text-sm font-semibold text-white flex items-center gap-2">
-                <i data-lucide="alert-circle" class="w-4 h-4 text-brand-500"></i> Problema Real
-            </h3>
-            
-            <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800/80">
-                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Dinâmica do Pivô Central em Aclives</p>
-                <p class="text-sm text-slate-300 leading-relaxed">
-                    Durante a operação de sistemas de irrigação por pivô central em áreas de topografia acidentada, o equipamento é 
-                    submetido a condições 
-                    <strong class="text-emerald-400 font-medium">cinemáticas</strong> e 
-                    <strong class="text-emerald-400 font-medium"> dinâmicas complexas</strong>.
-                    A estrutura treliçada possui uma elevada massa linear, condição que é maximizada quando a tubulação se encontra 
-                    pressurizada e operando em carga plena de água. Em terrenos planos, a translação ocorre sob um balanço de forças 
-                    relativamente estável, exigindo dos motoredutores apenas a superação da 
-                    <strong class="text-emerald-400 font-medium">inércia</strong> e do 
-                    <strong class="text-emerald-400 font-medium">atrito de rolamento</strong>.
-                </p>
-
-                <p class="text-sm text-slate-300 leading-relaxed"><br>
-                   No entanto, durante a transposição de aclives severos pelas torres intermediárias, o sistema depara-se com uma 
-                   alteração crítica no balanço de forças. O equipamento passa a exigir um incremento substancial de trabalho mecânico 
-                   para superar a componente tangencial da força peso que atua contra o sentido do deslocamento. Essa solicitação extrema 
-                   compromete a estabilidade operacional: a tração exigida pode superar o atrito estático pneu-solo, induzindo à patinagem, 
-                   ao desalinhamento angular entre os vãos e à transferência de tensões mecânicas severas para a estrutura, levando o 
-                   sistema ao limite de sua potência elétrica e resistência mecânica.
-                </p>    
-                <!-- Grid para 2 imagens alinhadas perfeitamente -->
-                <div class="flex flex-col md:flex-row gap-4 mt-4">
-                    
-                    <!-- Imagem 1 -->
-                    <div class="w-full md:w-1/2 overflow-hidden rounded-xl border border-slate-800 bg-slate-950 shadow-md aspect-video">
-                        <img src="https://github.com/neybarraz/site/blob/main/imagens/pivo_central_01.png?raw=true" alt="Operação normal do pivô central" class="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity">
-                    </div>
-
-                    <!-- Imagem 2 -->
-                    <div class="w-full md:w-1/2 overflow-hidden rounded-xl border border-slate-800 bg-slate-950 shadow-md aspect-video">
-                        <img src="https://github.com/neybarraz/site/blob/main/imagens/pivo_central_02.png?raw=true" alt="Colapso estrutural da torre" 
-                        class="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity">
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-slate-950/60 rounded-xl p-5 border border-slate-800/80 space-y-4 shadow-sm mt-4">
-                
-                <!-- Cabeçalho do Bloco -->
-                <p class="text-xs font-bold text-amber-400 uppercase tracking-wide flex items-center gap-1.5 border-b border-slate-800/60 pb-3">
-                    <i data-lucide="alert-triangle" class="w-4 h-4"></i> Mecânica do Colapso
-                </p>
-                
-                <!-- Parágrafo 1: O cenário ideal -->
-                <p class="text-sm text-slate-300 leading-relaxed">
-                    Em regime de operação nominal durante um aclive, os motoredutores do pivô central convertem  
-                    <strong class="text-emerald-400 font-medium">Energia Elétrica</strong>
-                    em energia mecânica para tracionar a estrutura. O sistema realiza um 
-                    <strong class="text-emerald-400 font-medium">Trabalho Mecânico ($W$)</strong>
-                    para superar a componente tangencial da força da gravidade, o que resulta no incremento contínuo da 
-                    <strong class="text-emerald-400 font-medium">Energia Potencial Gravitacional ($E_p$)</strong>
-                     da massa deslocada.
-                </p>
-
-                <!-- Parágrafo 2: A quebra do equilíbrio -->
-                <p class="text-sm text-slate-300 leading-relaxed">
-                    A estabilidade desse balanço é comprometida quando a inclinação topográfica excede o limite de tração das rodas, 
-                    ou quando ocorre perda de atrito estático com o solo (patinagem). A consequente redução da velocidade linear 
-                    gera um atraso cinemático (desalinhamento angular) da torre em relação ao eixo transversal do equipamento. 
-                    A partir deste evento, o desequilíbrio se propaga em duas frentes de estresse:
-                </p>
-
-                <!-- Destaque das Duas Frentes -->
-                <div class="pl-4 border-l-2 border-slate-700/50 space-y-4 my-3">
-                    <p class="text-sm text-slate-300 leading-relaxed">
-                        <span class="block text-brand-400 font-bold mb-1">1. Acúmulo de Energia Elástica (Tensão Estrutural)</span> 
-                        O atraso relativo da torre impõe uma tensão de flexão à treliça metálica de interligação. A tubulação passa a acumular 
-                        <strong class="text-emerald-400 font-medium">Energia Potencial Elástica</strong>,
-                        originando um vetor de força de arrasto lateral que atua em oposição ao sentido de deslocamento tracionado pelo motoredutor.
-                    </p>
-                    
-                    <p class="text-sm text-slate-300 leading-relaxed">
-                        <span class="block text-brand-400 font-bold mb-1">2. Pico de Potência Exigida</span> 
-                        Para compensar o déficit de velocidade e superar a somatória das forças resistivas (arrasto estrutural + componente gravitacional), 
-                        o sistema demanda um aumento imediato na realização de 
-                        <strong class="text-emerald-400 font-medium">Trabalho</strong>. Como a 
-                        <strong class="text-emerald-400 font-medium">Potência ($P$)</strong>
-                        é a taxa de transferência de trabalho no tempo ($P = \frac{\Delta W}{\Delta t}$), o aumento súbito na solicitação 
-                        de torque eleva a potência mecânica do motoredutor, aproximando-o de seu limite operacional.
-                    </p>
-                </div>
-
-                <!-- Parágrafo 3: A Consequência (Colapso) -->
-                <div class="bg-rose-950/20 rounded-lg p-4 border border-rose-900/30 mt-2">
-                    <p class="text-sm text-slate-300 leading-relaxed">
-                        Quando a potência exigida pelo trabalho de tração supera a capacidade nominal do motoredutor, o equipamento apresenta 
-                        <strong class="text-rose-400">falha por sobrecarga</strong>. 
-                        Este evento resulta no acionamento dos relés de proteção térmica (desarme elétrico) ou, sob  manutenção prolongada da carga, 
-                        na transição da estrutura metálica do regime elástico para a deformação plástica, culminando em colapso mecânico.
-                    </p>
-                </div>
-
-            </div>
-        
-            <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800/80">
-                <p class="text-xs font-semibold text-rose-400 uppercase tracking-wide mb-1">Impacto Operacional e Agronômico</p>
-                <p class="text-sm text-slate-300 leading-relaxed">
-                    A consolidação da falha mecânica ou elétrica resulta na parada não programada do equipamento (downtime). 
-                    Durante janelas críticas de irrigação com alta demanda evapotranspirométrica, o tempo necessário para o resgate logístico da máquina, 
-                    substituição de motoredutores ou reparo estrutural da treliça interrompe a aplicação da lâmina d'água. 
-                    Esse estresse hídrico na cultura pode ocasionar diminuição da produtividade, somando-se aos elevados 
-                    custos de manutenção corretiva.
-                </p>
-            </div>
-        
-            <!-- Mídias / Vídeos Demonstrativos -->
-            <div class="flex flex-col md:flex-row gap-4 pt-1">
-                <div class="w-full md:w-1/2 overflow-hidden rounded-xl border border-slate-800 bg-slate-950 aspect-video shadow-md">
-                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/NtWOVFTaIuA" title="Pivô central desalinhado em rampa" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-                <div class="w-full md:w-1/2 overflow-hidden rounded-xl border border-slate-800 bg-slate-950 aspect-video shadow-md">
-                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/ykwhha32xQ0" title="Desalinhamento e quase colapso de pivô" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-            </div>
-        
-            <!-- Delimitação do Sistema -->
-            <div class="space-y-2 pt-2">
-                <h3 class="text-sm font-semibold text-white flex items-center gap-2">
-                    <i data-lucide="scan" class="w-4 h-4 text-brand-500"></i> Delimitação do Sistema
-                </h3>
-                <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800/80">
-                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Volume de Controle</p>
-                    <p class="text-sm text-slate-300 leading-relaxed">
-                        Para garantir o rigor analítico na resolução do balanço energético, o Volume de Controle adotado neste 
-                        estudo abstrai as variáveis macroscópicas do equipamento completo. As fronteiras do sistema físico são 
-                        delimitadas a um subsistema isolado, compreendendo exclusivamente 
-                        <strong class="text-emerald-400 font-medium">uma unidade motriz (torre de tração)</strong> e
-                        <strong class="text-emerald-400 font-medium">seus dois vãos estruturais adjacentes</strong>.
-                        Esta restrição espacial permite isolar e quantificar as interações cinemáticas, os esforços dinâmicos e o 
-                        acúmulo de energia elástica manifestados pontualmente durante a transposição da anomalia topográfica (aclive).
-                    </p>
-                </div>
-            </div>
-        
-            <!-- Tabela de Variáveis -->
-            <div class="space-y-3 pt-2">
-                <h3 class="text-sm font-semibold text-white flex items-center gap-2">
-                    <i data-lucide="table" class="w-4 h-4 text-brand-500"></i> Matriz de Variáveis
-                </h3>
-                <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/60">
-                    <table class="w-full text-left text-xs text-slate-300">
-                        <thead class="bg-slate-900 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
-                            <tr>
-                                <th class="py-3 px-4 w-1/4">Componente</th>
-                                <th class="py-3 px-4 w-1/4">Grandeza Física</th>
-                                <th class="py-3 px-4 w-2/4">Papel no Sistema (Função)</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800/60">
-                            <tr>
-                                <td class="py-3 px-4 font-medium text-white">Massa da Torre + Massa da Água <br> $$m$$</td>
-                                <td class="py-3 px-4 font-mono text-emerald-400">Energia Potencial <br> $$E_p = m \cdot g \cdot h$$</td>
-                                <td class="py-3 px-4 text-slate-300">
-                                    <strong class="text-white">Carga Inercial e Gravitacional</strong> <br> 
-                                    Representa o peso próprio estrutural somado à carga operacional de água. A demanda de trabalho 
-                                    gravitacional é diretamente proporcional à elevação topográfica ($h$).</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-medium text-white">Pneus / Deslocamento <br> $$\Delta d$$</td>
-                                <td class="py-3 px-4 font-mono text-emerald-400">Trabalho Mecânico <br> $$W = F \cdot \Delta d$$</td>
-                                <td class="py-3 px-4 text-slate-300">
-                                    <strong class="text-white">Interface de Tração (Cinemática)</strong> <br>
-                                     O contato pneu-solo possibilita o deslocamento ($\Delta d$). É a variável física que converte a 
-                                     força de tração gerada no Trabalho Mecânico efetivo e final exigido da máquina.</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-medium text-white">Treliça Metálica / Vão</td>
-                                <td class="py-3 px-4 font-mono text-emerald-400">Energia Elástica <br> $$W_{\text{el}}$$</td>
-                                <td class="py-3 px-4 text-slate-300">
-                                    <strong class="text-white">Acumulador Reativo (Tensão)</strong> <br>
-                                    A estrutura atua como um sistema elástico. O desalinhamento angular causa flexão, acumulando energia 
-                                    e gerando um vetor de força lateral de arrasto que aumenta a demanda resistiva.</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-medium text-white">Motoredutor</td>
-                                <td class="py-3 px-4 font-mono text-emerald-400">Potência Mecânica/Elétrica <br> $$P = \frac{W}{\Delta t}$$</td>
-                                <td class="py-3 px-4 text-slate-300">
-                                    <strong class="text-white">Fonte de Potência Ativa</strong> <br>
-                                    Converte potência elétrica ($P_{\text{elétrica}} = V \cdot I$) em tração mecânica no solo.</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-medium text-white">Painel / Sensor de Ângulo <br> $$\theta$$</td>
-                                <td class="py-3 px-4 font-mono text-emerald-400">Árbitro de Desalinhamento</td>
-                                <td class="py-3 px-4 text-slate-300">
-                                    <strong class="text-white">Limitador de Segurança</strong> <br> 
-                                    Corta a alimentação elétrica do motoredutor caso o desvio angular atinja a margem de tolerância do projeto, 
-                                    atuando preventivamente antes do limite de escoamento do material.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- ---------------------------------------------------------------------------------------------------- -->
-
-        <!-- MÓDULO 2 -->
-        <section class="bg-slate-900/60 rounded-2xl border border-slate-800 p-6 sm:p-8 space-y-6">
-            <!-- Cabeçalho do Módulo -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-5">
-                <div>
-                    <span class="text-xs font-bold text-brand-500 uppercase tracking-wider">Módulo 02</span>
-                    <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 mt-1">
-                        <i data-lucide="sliders" class="w-6 h-6 text-brand-500"></i>
-                        Painel de Controle
-                    </h2>
-                </div>
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-800 text-slate-300 text-xs font-medium w-fit">
-                    <i data-lucide="play" class="w-3.5 h-3.5 text-brand-500"></i> Interação Pura e Coleta de Dados
-                </span>
-            </div>
-
-
-<!-- Introdução -->
-            <p class="text-sm text-slate-300 leading-relaxed">
-                Nesta etapa prática, você assumirá o controle dinâmico do sistema. O simulador computacional foi desenvolvido para calcular, em tempo real, a conversão de 
-                <strong class="text-emerald-400 font-medium">Trabalho em Potência</strong> exigida pelo motoredutor contra as forças gravitacionais na rampa e o arrasto gerado pela 
-                <strong class="text-white">Energia Elástica de deformação</strong> da treliça.
-            </p>
-            
-            <!-- Container Flex/Grid para as Ações (Simulador e Forms lado a lado no Desktop) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                
-                <!-- Bloco 1: Ambiente de Simulação (Colab) -->
-                <div class="bg-slate-950/60 rounded-xl p-5 border border-slate-800/80 space-y-3 flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-sm font-semibold text-white flex items-center gap-2">
-                            <i data-lucide="cpu" class="w-4 h-4 text-brand-500"></i> Ambiente de Simulação
-                        </h3>
-                        <p class="text-sm text-slate-300 leading-relaxed mt-2">
-                            O motor matemático já está configurado. Acesse o notebook interativo, execute a célula de código inicial e utilize o painel de controle para testar os limites físicos do pivô.
-                        </p>
-                    </div>
-                    <div class="pt-3">
-                        <a href="https://colab.research.google.com/drive/1hDL3zr0QNUscZvHm-3_PJsx7cCAOtJgY?usp=sharing" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white text-sm font-medium rounded-lg transition-colors w-full sm:w-fit justify-center">
-                            <i data-lucide="play-circle" class="w-4 h-4 text-emerald-400"></i>
-                            Abrir Simulador Computacional
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Bloco 2: Submissão do Laudo (Google Forms) -->
-                <div class="bg-slate-950/60 rounded-xl p-5 border border-slate-800/80 space-y-3 flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-sm font-semibold text-white flex items-center gap-2">
-                            <i data-lucide="clipboard-check" class="w-4 h-4 text-brand-500"></i> Registro de Perícia
-                        </h3>
-                        <p class="text-sm text-slate-300 leading-relaxed mt-2">
-                            Os roteiros de testes estão detalhados nas seções abaixo. No entanto, todas as coletas de dados e o seu laudo técnico final devem ser submetidos exclusivamente pelo formulário oficial.
-                        </p>
-                    </div>
-                    <div class="pt-3">
-                        <!-- IMPORTANTE: Substitua o '#' pelo link real do seu Google Forms -->
-                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSf96Fms33zuhGvTax7kWWEnlEtLclKLuogjGKcWS_S6S9f2QQ/viewform" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white text-sm font-medium rounded-lg transition-colors w-full sm:w-fit justify-center">
-                            <i data-lucide="file-text" class="w-4 h-4 text-emerald-400"></i>
-                            Acessar Formulário de Respostas
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-
-
-<!-- Cabeçalho Roteiro de Testes -->
-            <div class="pt-4 border-t border-slate-800 space-y-2">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i data-lucide="clipboard-list" class="w-5 h-5 text-brand-500"></i> Roteiro de Ensaios (Coleta de Dados)
-                </h3>
-                <p class="text-sm text-slate-300 leading-relaxed">
-                    Os roteiros de simulação abaixo definem as condições de contorno para cada ensaio. Utilize o simulador interativo para reproduzir os cenários, extrair as variáveis mecânicas quantitativas (<strong class="text-white">Trabalho, Potência e Energia de Deformação</strong>) e submeter seus diagnósticos no Formulário Oficial.
-                </p>
-            </div>
-
-            <!-- Missão 1 -->
-            <div class="bg-slate-950/60 rounded-xl p-4 sm:p-5 border border-slate-800/80 space-y-4">
-                <p class="text-xs font-bold text-emerald-400 uppercase tracking-wide flex items-center gap-1.5">
-                    <i data-lucide="target" class="w-4 h-4"></i> Ensaio 1: O Componente Gravitacional (Aclive Ideal)
-                </p>
-                <p class="text-sm text-slate-300 leading-relaxed">
-                    O objetivo deste primeiro ensaio é isolar a variável topográfica. Você quantificará a demanda de Potência Mecânica exigida estritamente em função da componente tangencial do peso, assumindo que a cinemática do equipamento permanece perfeitamente alinhada com o eixo central.
-                </p>
-                <p class="text-sm text-slate-300 leading-relaxed bg-slate-900/50 p-3 rounded-lg border border-slate-800">
-                    <strong class="text-white">Parametrização:</strong> Configure o sistema com <code class="text-emerald-400 font-mono">Massa = 5.0 ton</code> e <code class="text-emerald-400 font-mono">Desalinhamento = 0°</code>. Incremente o slider de <strong class="text-white">Inclinação da Colina</strong> conforme a tabela de aferição abaixo e registre os resultados apontados no diagnóstico.
-                </p>
-                
-                <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/40 mt-3">
-                    <table class="w-full text-center text-xs text-slate-300">
-                        <thead class="bg-slate-900 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
-                            <tr>
-                                <th class="py-3 px-4 text-center">Inclinação Topográfica (θ)</th>
-                                <th class="py-3 px-4 text-center">Força Gravitacional <br>$$F_{\text{grav}}~~(kN)$$</th>
-                                <th class="py-3 px-4 text-center">Potência Mecânica <br> Exigida [kW]</th>
-                                <th class="py-3 px-4 text-center">Status Operacional</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800/60">
-                            <tr>
-                                <td class="py-3 px-4 font-medium text-white text-center">0° (Plano)</td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-medium text-white text-center">10°</td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-medium text-white text-center">20°</td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Missão 2 -->
-            <div class="bg-slate-950/60 rounded-xl p-4 sm:p-5 border border-slate-800/80 space-y-4">
-                <p class="text-xs font-bold text-amber-400 uppercase tracking-wide flex items-center gap-1.5">
-                    <i data-lucide="activity" class="w-4 h-4"></i> Ensaio 2: O Componente de Deformação Elástica (Arrasto Estrutural)
-                </p>
-                <p class="text-sm text-slate-300 leading-relaxed">
-                    Neste segundo ensaio, introduz-se o estresse por atraso cinemático (decorrente de patinagem). O sistema exige que o motoredutor supere não apenas a componente gravitacional de uma colina moderada, mas também a massiva força de arrasto gerada pela energia potencial elástica acumulada durante a flexão da treliça.
-                </p>
-                <p class="text-sm text-slate-300 leading-relaxed bg-slate-900/50 p-3 rounded-lg border border-slate-800">
-                    <strong class="text-white">Parametrização:</strong> Fixe as variáveis de contorno em <code class="text-amber-400 font-mono">Massa = 4.0 ton</code> e <code class="text-amber-400 font-mono">Inclinação = 10°</code>. Incremente progressivamente o slider de <strong class="text-white">Desalinhamento da Treliça</strong> para simular o atraso da torre. Registre a evolução da demanda energética e a transição crítica do status operacional.
-                </p>
-                
-                <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/40 mt-3">
-                    <table class="w-full text-center text-xs text-slate-300">
-                        <thead class="bg-slate-900 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
-                            <tr>
-                                <th class="py-3 px-4 text-center">Desalinhamento Angular (Δα)</th>
-                                <th class="py-3 px-4 text-center">Arrasto Elástico ($F_{\text{arrasto}}$) [kN]</th>
-                                <th class="py-3 px-4 text-center">Força Total de Tração ($F_{\text{total}}$) [kN]</th>
-                                <th class="py-3 px-4 text-center">Potência Mecânica Exigida [kW]</th>
-                                <th class="py-3 px-4 text-center">Status Operacional</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800/60">
-                            <tr>
-                                <td class="py-3 px-4 font-medium text-white text-center">0° (Alinhado)</td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-medium text-white text-center">5° (Atraso Médio)</td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-medium text-white text-center">12° (Torção Severa)</td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-           
-           <!-- Missão 3 -->
-            <div class="bg-slate-950/60 rounded-xl p-4 sm:p-5 border border-slate-800/80 space-y-4">
-                <p class="text-xs font-bold text-rose-400 uppercase tracking-wide flex items-center gap-1.5">
-                    <i data-lucide="alert-triangle" class="w-4 h-4"></i> Ensaio 3: Determinação do Limite Operacional (Colapso Sistêmico)
-                </p>
-                <p class="text-sm text-slate-300 leading-relaxed">
-                    Neste ensaio final, o objetivo é extrapolar os limites de engenharia do equipamento. Sabendo que o motoredutor possui uma capacidade nominal máxima de projeto de <strong class="text-rose-400">1.50 kW</strong>, você deverá mapear a pior combinação de estresse físico que leva o sistema à ruptura simultânea (Falha Energética e Deformação Estrutural Crítica).
-                </p>
-                <p class="text-sm text-slate-300 leading-relaxed bg-slate-900/50 p-3 rounded-lg border border-slate-800">
-                    <strong class="text-white">Parametrização:</strong> Modifique livremente as três variáveis independentes no simulador até induzir o diagnóstico crítico de <span class="bg-rose-500/20 text-rose-400 px-2 py-0.5 rounded font-bold border border-rose-500/30">🚨 COLAPSO TOTAL</span>. Registre abaixo a configuração de contorno exata que desencadeou esta falha multivariável.
-                </p>
-                
-                <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/40 mt-3">
-                    <table class="w-full text-center text-xs text-slate-300">
-                        <thead class="bg-slate-900 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
-                            <tr>
-                                <th class="py-3 px-4 text-center">Carga Operacional <br> ($m$) [ton]</th>
-                                <th class="py-3 px-4 text-center">Inclinação Topográfica <br> ($\theta$) [°]</th>
-                                <th class="py-3 px-4 text-center">Desalinhamento Angular <br> ($\Delta\alpha$) [°]</th>
-                                <th class="py-3 px-4 text-center">Potência Mecânica <br> Crítica [kW]</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800/60">
-                            <tr>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                                <td class="py-3 px-4 text-slate-500 text-center"> ... </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- ---------------------------------------------------------------------------------------------------- -->
-        <!-- MÓDULO 3 -->
-        <section class="bg-slate-900/60 rounded-2xl border border-slate-800 p-6 sm:p-8 space-y-6 mt-8">
-            <!-- Cabeçalho do Módulo -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-5">
-                <div>
-                    <span class="text-xs font-bold text-brand-500 uppercase tracking-wider">Módulo 03</span>
-                    <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 mt-1">
-                        <i data-lucide="cpu" class="w-6 h-6 text-brand-500"></i>
-                        Matemática e Análise Crítica
-                    </h2>
-                </div>
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-800 text-slate-300 text-xs font-medium w-fit">
-                    <i data-lucide="calculator" class="w-3.5 h-3.5 text-brand-500"></i> Desconstrução Analítica
-                </span>
-            </div>
-
-            <!-- Introdução -->
-            <p class="text-sm text-slate-300 leading-relaxed">
-                Nesta etapa, formalizamos o comportamento dinâmico observado nos ensaios computacionais através de uma 
-                <strong class="text-white">modelagem matemática determinística</strong>. O objetivo é elucidar as formulações 
-                algébricas que regem o simulador e estabelecer os limites de validade entre a aproximação analítica e as perturbações 
-                observadas na realidade de campo.
-            </p>
-
-            <!-- 1. As Equações Fundamentais do Sistema -->
-            <div class="space-y-4 pt-4 border-t border-slate-800/60">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i data-lucide="sigma" class="w-5 h-5 text-brand-500"></i> 1. As Equações Fundamentais do Sistema
-                </h3>
-                <p class="text-sm text-slate-300 leading-relaxed">
-                    O balanço energético da unidade motriz é estabelecido pela taxa temporal de realização de trabalho 
-                    contra três vetores de resistência concomitantes. A somatória desses esforços quantifica a demanda 
-                    instantânea de potência mecânica exigida do equipamento:
-                </p>
-                <div class="grid grid-cols-1 gap-4 mt-4">                    
-                    <!-- Eq 1 -->
-                    <div class="bg-slate-950/60 rounded-xl p-4 sm:p-5 border border-slate-800/80 flex flex-col md:flex-row gap-4 items-center">
-                        <div class="flex-1 space-y-2 w-full">
-                            <h4 class="text-sm font-bold text-emerald-400">1. Componente Tangencial da Força Peso</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                Quantifica a solicitação gravitacional que atua paralelamente ao plano inclinado ($\theta$), 
-                                impondo uma força reativa diretamente oposta ao vetor de deslocamento cinemático da máquina.</p>
-                        </div>
-                        <div class="flex-1 w-full bg-slate-900/80 p-3 rounded-lg border border-slate-800 overflow-x-auto text-sm text-slate-300">
-                            $$P = m \cdot g$$
-                            $$F_{\text{gravidade}} = P \cdot \sin(\theta)$$
-                            $$F_{\text{gravidade}} = m \cdot g \cdot \sin(\theta)$$
-                        </div>
-                    </div>
-
-                    <!-- Eq 2 -->
-                    <div class="bg-slate-950/60 rounded-xl p-4 sm:p-5 border border-slate-800/80 flex flex-col md:flex-row gap-4 items-center">
-                        <div class="flex-1 space-y-2 w-full">
-                            <h4 class="text-sm font-bold text-emerald-400">2. Resistência ao Rolamento (Atrito Solo-Pneu)</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                Modela o esforço dissipativo necessário para vencer a deformação elasto-plástica na interface pneu-solo, 
-                                sendo $\mu_{\text{rol}}$ o coeficiente empírico de resistência ao rolamento associado à força Normal ($N$).</p>
-                        </div>
-                        <div class="flex-1 w-full bg-slate-900/80 p-3 rounded-lg border border-slate-800 overflow-x-auto text-sm text-slate-300">
-                            $$F_{\text{rolamento}} = \mu_{\text{rol}} \cdot N $$
-                            $$F_{\text{rolamento}} = \mu_{\text{rol}} \cdot m \cdot g \cdot \cos(\theta)$$
-                        </div>
-                    </div>
-
-                    <!-- Eq 3 -->
-                    <div class="bg-slate-950/60 rounded-xl p-4 sm:p-5 border border-slate-800/80 flex flex-col md:flex-row gap-4 items-center">
-                        <div class="flex-1 space-y-2 w-full">
-                            <h4 class="text-sm font-bold text-emerald-400">3. Arrasto por Deformação Elástica Estrutural</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                Descreve a resposta reativa da treliça metálica ao atraso cinemático angular ($\Delta\alpha$). 
-                                A tubulação atua como um acumulador de energia potencial de torção 
-                                ($U_e = \frac{1}{2} k_{\text{torção}} (\Delta\alpha)^2$), convertendo-se em um massivo vetor de arrasto lateral.</p>
-                        </div>
-                        <div class="flex-1 w-full bg-slate-900/80 p-3 rounded-lg border border-slate-800 overflow-x-auto text-sm text-slate-300">
-                            $$F_{\text{arrasto}} = k_{\text{estrutural}} \cdot \Delta\alpha$$
-                            
-                        </div>
-                    </div>
-                    <!-- Eq 4 -->
-                    <div class="bg-slate-950/60 rounded-xl p-4 sm:p-5 border border-slate-800/80 flex flex-col md:flex-row gap-4 items-center">
-                        <div class="flex-1 space-y-2 w-full">
-                            <h4 class="text-sm font-bold text-emerald-400">4. Superposição de Forças (Tração Total)</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                Aplica o princípio da superposição vetorial para consolidar todas as resistências dinâmicas 
-                                que atuam em oposição ao sentido de deslocamento da máquina.</p>
-                        </div>
-                        <div class="flex-1 w-full bg-slate-900/80 p-3 rounded-lg border border-slate-800 overflow-x-auto text-sm text-slate-300">
-                            $$F_{\text{total}} = F_{\text{rolamento}} + F_{\text{gravidade}} + F_{\text{arrasto}}$$
-                        </div>
-                    </div>
-
-                    <!-- Eq 5 -->
-                    <div class="bg-slate-950/60 rounded-xl p-4 sm:p-5 border border-slate-800/80 flex flex-col md:flex-row gap-4 items-center">
-                        <div class="flex-1 space-y-2 w-full">
-                            <h4 class="text-sm font-bold text-emerald-400">5. Potência Mecânica Instantânea</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                Correlaciona o esforço total de tração com a velocidade linear constante de avanço ($v$), 
-                                definindo a taxa de transferência de energia (demanda instantânea) imposta ao motoredutor.</p>
-                        </div>
-                        <div class="flex-1 w-full bg-slate-900/80 p-3 rounded-lg border border-slate-800 overflow-x-auto text-sm text-slate-300">
-                            $$Pot_{\text{mec}} = F_{\text{total}} \cdot v $$
-                            $$Pot_{\text{mec}} = \frac{W_{\text{total}}}{\Delta t}$$
-                        </div>
-                    </div>
-                    <!-- Eq 6 -->
-                    <div class="bg-slate-950/60 rounded-xl p-4 sm:p-5 border border-slate-800/80 space-y-3">
-                        <div class="space-y-2 w-full">
-                            <h4 class="text-sm font-bold text-rose-400 flex items-center gap-2">
-                                <i data-lucide="zap" class="w-4 h-4"></i> 6. Condições de Contorno para Falha Sistêmica (Equilíbrio vs. Desarme)
-                            </h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                Estabelece os limites operacionais do projeto. A <strong class="text-white">Potência Nominal ($Pot_{\text{nominal}}$)</strong> representa a capacidade máxima de fornecimento de energia contínua do motoredutor, enquanto o <strong class="text-white">Desalinhamento Crítico ($\Delta\alpha_{\text{crítico}}$)</strong> define a deflexão angular máxima permitida antes do limite de escoamento da treliça. A violação destes limiares transita o sistema do regime estável para a falha.
-                            </p>
-                        </div>
-                        <div class="w-full bg-slate-900/80 p-4 rounded-lg border border-slate-800 overflow-x-auto text-sm text-slate-300 flex justify-center mt-2">
-                            $$\begin{cases}     Pot_{\text{mec}} \le Pot_{\text{nominal}} \quad \text{e} \quad \Delta\alpha < \Delta\alpha_{\text{crítico}} & \implies \text{Regime Seguro (Operação Estável)} \\     Pot_{\text{mec}} > Pot_{\text{nominal}} \quad \text{ou} \quad \Delta\alpha \ge \Delta\alpha_{\text{crítico}} & \implies \text{Falha (Desarme Térmico / Colapso Estrutural)}     \end{cases}$$
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 2. O Diagrama de Causalidade -->
-            <div class="space-y-4 pt-6 border-t border-slate-800">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i data-lucide="git-merge" class="w-5 h-5 text-brand-500"></i> 2. O Diagrama de Causalidade (Fluxo Energético)
-                </h3>
-                <p class="text-sm text-slate-300 leading-relaxed">
-                    A propagação do estresse mecânico, desde a perturbação topográfica inicial até a sobrecarga elétrica da unidade motriz, 
-                    pode ser mapeada pelo seguinte encadeamento determinístico:
-                </p>
-                <div class="bg-slate-950/60 rounded-xl p-6 border border-slate-800/80 overflow-x-auto flex justify-center text-sm text-slate-300">
-                    $$
-                    \begin{array}{c}
-                    \boxed{\begin{array}{c} \text{Topografia e Carga} \\ (\theta,\, m) \end{array}} \xrightarrow{\;\text{Decomposição do Peso}\;} \boxed{\begin{array}{c} \text{Forças Resistivas} \\ (F_{\text{grav}} + F_{\text{rol}}) \end{array}} \\[15pt]
-                    \xrightarrow{\;\text{Atraso da Torre}\;} \boxed{\begin{array}{c} \text{Deformação Elástica} \\ (F_{\text{arrasto}} \propto \Delta\alpha) \end{array}} \xrightarrow{\;W = \int F\,ds\;} \boxed{\begin{array}{c} \text{Trabalho Total} \\ (W_{\text{total}}) \end{array}} \\[15pt]
-                    \xrightarrow{\;Pot = F \cdot v\;} \boxed{\begin{array}{c} \text{Potência Exigida} \\ (Pot_{\text{mec}} \text{ vs } Pot_{\text{nom}}) \end{array}}
-                    \end{array}
-                    $$
-                </div>
-            </div>
-
-            <!-- 3. Alcance vs. Limitações da Modelagem -->
-            <div class="space-y-4 pt-6 border-t border-slate-800">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i data-lucide="scale" class="w-5 h-5 text-brand-500"></i> 3. Alcance vs. Limitações da Modelagem
-                </h3>
-                <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/60 mt-3">
-                    <table class="w-full text-left text-xs text-slate-300">
-                        <thead class="bg-slate-900 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
-                            <tr>
-                                <th class="py-3 px-4 w-1/2">Escopo de Validade (Potencialidades Analíticas)</th>
-                                <th class="py-3 px-4 w-1/2 border-l border-slate-800/60">Restrições de Contorno (Limitações Fenomenológicas)</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800/60">
-                            <tr>
-                                <td class="py-3 px-4 text-emerald-300/90 font-medium">
-                                    Quantificação da demanda de potência mecânica em função da carga inercial e do gradiente 
-                                    topográfico da rampa ($\theta$).</td>
-                                <td class="py-3 px-4 border-l border-slate-800/60">
-                                    <strong class="text-amber-400/90">Interação Pneu-Solo (Slip):</strong> 
-                                    Desconsidera a perda de tração dinâmica e o aumento do atrito gerado pelo afundamento e 
-                                    formação de sulcos profundos no rastro da roda.</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 text-emerald-300/90 font-medium">
-                                    Determinação do incremento da força de arrasto gerada pela energia potencial elástica 
-                                    de flexão associada ao atraso cinemático ($\Delta\alpha$).</td>
-                                <td class="py-3 px-4 border-l border-slate-800/60">
-                                    <strong class="text-amber-400/90">Comportamento Não Linear da Treliça:</strong> 
-                                    Modela a rigidez como uma constante elástica linear ($k_{\text{flexional}}$), 
-                                    ignorando efeitos complexos como flambagem local e tensões de cisalhamento nas cantoneiras.</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 text-emerald-300/90 font-medium">
-                                    Definição do limiar crítico de desarme elétrico provocado pela extrapolação da 
-                                    potência nominal do motoredutor.</td>
-                                <td class="py-3 px-4 border-l border-slate-800/60">
-                                    <strong class="text-amber-400/90">Hidrodinâmica Transiente:</strong> 
-                                    Abstrai a inércia do fluido e a oscilação da massa de água no interior do vão durante acelerações, 
-                                    paradas ou solavancos da máquina.</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 text-emerald-300/90 font-medium">
-                                    Estabelecimento da correlação quase-estática entre a velocidade linear de avanço ($v$) e a 
-                                    taxa temporal de trabalho exigido.</td>
-                                <td class="py-3 px-4 border-l border-slate-800/60">
-                                    <strong class="text-amber-400/90">Variação Térmica do Estator:</strong> 
-                                    Oculta a perda de eficiência mecânica causada pela degradação térmica do enrolamento 
-                                    do motor (Efeito Joule) sob operação contínua em regime de sobrecarga.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- 4. Análise Crítica de Engenharia -->
-            <div class="space-y-4 pt-6 border-t border-slate-800">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i data-lucide="brain-circuit" class="w-5 h-5 text-brand-500"></i> 4. Análise Crítica de Engenharia
-                </h3>
-                <p class="text-sm text-slate-200 leading-relaxed bg-brand-900/10 p-4 rounded-lg border border-brand-500/20">
-                    Considerando que a presente modelagem computacional assume como premissas simplificatórias uma 
-                    velocidade linear constante ($v$), um coeficiente de atrito pneu-solo isotrópico e um comportamento de arrasto 
-                    estrutural estritamente elástico-linear, discorra: 
-                    quais fenômenos dinâmicos e perturbações ambientais inerentes à operação real de campo poderiam precipitar a 
-                    falha sistêmica do equipamento, mas que foram deliberadamente abstraídos desta simulação?
-                </p> 
-            </div>
-
-        </section>
-        <!-- ---------------------------------------------------------------------------------------------------- -->
-        <!-- MÓDULO 4 -->
-        <section class="bg-slate-900/60 rounded-2xl border border-slate-800 p-6 sm:p-8 space-y-6 mt-8">
-            
-            <!-- Cabeçalho do Módulo -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-5">
-                <div>
-                    <span class="text-xs font-bold text-brand-500 uppercase tracking-wider">Módulo 04</span>
-                    <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 mt-1">
-                        <i data-lucide="file-check-2" class="w-6 h-6 text-brand-500"></i>
-                        Laudo Técnico
-                    </h2>
-                    <p class="text-sm text-slate-400 mt-1">Decisão Técnica</p>
-                </div>
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-800 text-slate-300 text-xs font-medium w-fit">
-                    <i data-lucide="gavel" class="w-3.5 h-3.5 text-brand-500"></i> Avaliação Prática
-                </span>
-            </div>
-
-            <!-- Introdução -->
-            <p class="text-sm text-slate-300 leading-relaxed">
-                Nesta etapa consolidativa, você assume a posição de 
-                <strong class="text-white">Responsável Técnico (RT) pela Irrigação e Mecanização</strong>. 
-                Sua atribuição é diagnosticar uma ocorrência de campo severa, utilizando o modelo computacional como instrumento de 
-                perícia para a emissão de um laudo executivo. O escopo desta avaliação transcende a resolução algébrica: 
-                a meta é a <strong class="text-emerald-400 font-medium">tomada de decisão agronômica e operacional</strong>, 
-                estritamente fundamentada nas grandezas dinâmicas de Trabalho, Potência e na preservação da integridade física do equipamento.
-            </p>
-
-
-
-
-<!-- 1. O Estudo de Caso -->
-            <div class="space-y-4 pt-4 border-t border-slate-800/60">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i data-lucide="search" class="w-5 h-5 text-brand-500"></i> 1. O Estudo de Caso (Ocorrência de Campo)
-                </h3>
-                
-                <!-- Ordem de Serviço -->
-                <div class="bg-slate-900/80 rounded-xl p-5 border border-slate-700/80 space-y-4 relative overflow-hidden">
-                    <!-- Detalhe visual de documento -->
-                    <div class="absolute top-0 right-0 w-16 h-16 bg-brand-500/10 rounded-bl-full flex items-start justify-end p-3">
-                        <i data-lucide="file-warning" class="w-5 h-5 text-brand-500/50"></i>
-                    </div>
-
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wide border-b border-slate-700 pb-2">
-                        Relatório de Ocorrência Técnica (O.S. #4092)
-                    </p>
-                    <p class="text-sm text-slate-300 leading-relaxed italic">
-                        Durante o turno de irrigação noturno no talhão Norte, o painel de segurança detectou uma falha de deslocamento.
-                        O pivô encontra-se imobilizado no trecho de maior inclinação do terreno (aclive severo). 
-                        A equipe de ronda relatou intenso ruído mecânico oriundo do motoredutor da 'Torre 4', imediatamente antes do 
-                        desarme elétrico total do equipamento. 
-                    </p>
-                    
-                    <div class="pt-3">
-                        <p class="text-xs font-bold text-emerald-400 uppercase tracking-wide mb-2">Dados Paramétricos Levantados em Campo:</p>
-                        <ul class="space-y-2">
-                            <li class="text-sm text-slate-300 flex items-start gap-2">
-                                <i data-lucide="droplet" class="w-4 h-4 text-slate-500 mt-0.5 shrink-0"></i>
-                                <span><strong class="text-white">Carga Operacional:</strong> Tubulação pressurizada com vazão de projeto, totalizando massa estrutural e hídrica de <strong class="text-amber-400">6.5 ton</strong> no vão afetado.</span>
-                            </li>
-                            <li class="text-sm text-slate-300 flex items-start gap-2">
-                                <i data-lucide="mountain" class="w-4 h-4 text-slate-500 mt-0.5 shrink-0"></i>
-                                <span><strong class="text-white">Perturbação Topográfica:</strong> Aclive aferido no local da Torre 4 com inclinação de <strong class="text-amber-400">18°</strong>.</span>
-                            </li>
-                            <li class="text-sm text-slate-300 flex items-start gap-2">
-                                <i data-lucide="move-up-right" class="w-4 h-4 text-slate-500 mt-0.5 shrink-0"></i>
-                                <span><strong class="text-white">Desvio Geométrico:</strong> Patinagem gerou atraso severo do rodado, resultando em um desalinhamento elástico de <strong class="text-amber-400">8°</strong> em relação ao eixo transversal do pivô.</span>
-                            </li>
-                            <li class="text-sm text-slate-300 flex items-start gap-2">
-                                <i data-lucide="settings" class="w-4 h-4 text-slate-500 mt-0.5 shrink-0"></i>
-                                <span><strong class="text-white">Limite Eletromecânico:</strong> Motoredutor instalado possui potência nominal limite de projeto de <strong class="text-rose-400">1.50 kW</strong>.</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-
-
-            <!-- 2. Formulário de Diagnóstico Pericial -->
-            <div class="space-y-5 pt-6 border-t border-slate-800/60">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i data-lucide="clipboard-signature" class="w-5 h-5 text-brand-500"></i> 2. Formulário de Diagnóstico Pericial
-                </h3>
-                
-                <p class="text-sm text-slate-300 leading-relaxed bg-slate-900/50 p-4 rounded-lg border border-slate-800">
-                    <strong class="text-white font-bold">Diretriz de Perícia:</strong> 
-                    Parametrize o modelo computacional (Módulo 2) utilizando os dados operacionais extraídos da Ordem de Serviço. 
-                    Analise as grandezas dinâmicas computadas pelo simulador e consolide sua tomada de decisão preenchendo o laudo 
-                    executivo a seguir.
-                </p>
-
-                <!-- A. LEITURA DE DADOS -->
-                <div class="bg-slate-950/60 rounded-xl p-4 sm:p-5 border border-slate-800/80 space-y-4">
-                    <div class="space-y-1">
-                        <h4 class="text-sm font-bold text-emerald-400">A. LEITURA DE DADOS (RESULTADOS DA SIMULAÇÃO)</h4>
-                        <p class="text-xs text-slate-400">Preencha com os valores exatos extraídos do painel para embasar sua decisão técnica.</p>
-                    </div>
-                    
-                    <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/40">
-                        <table class="w-full text-left text-xs text-slate-300">
-                            <thead class="bg-slate-900 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
-                                <tr>
-                                    <th class="py-3 px-4 w-2/3">Parâmetro Físico</th>
-                                    <th class="py-3 px-4 w-1/3 border-l border-slate-800/60">Valor Aferido no Simulador</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-800/60">
-                                <tr class="hover:bg-slate-800/30 transition-colors">
-                                    <td class="py-3 px-4 font-medium text-white">Trabalho / Força contra a Gravidade (kN)</td>
-                                    <td class="py-3 px-4 border-l border-slate-800/60 text-slate-500 font-mono">...</td>
-                                </tr>
-                                <tr class="hover:bg-slate-800/30 transition-colors">
-                                    <td class="py-3 px-4 font-medium text-white">Força de Arrasto por Deformação (kN)</td>
-                                    <td class="py-3 px-4 border-l border-slate-800/60 text-slate-500 font-mono">...</td>
-                                </tr>
-                                <tr class="hover:bg-slate-800/30 transition-colors">
-                                    <td class="py-3 px-4 font-medium text-white">Potência Mecânica Exigida (kW)</td>
-                                    <td class="py-3 px-4 border-l border-slate-800/60 text-slate-500 font-mono">...</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- B. STATUS OPERACIONAL -->
-                <div class="bg-slate-950/60 rounded-xl p-4 sm:p-5 border border-slate-800/80 space-y-4">
-                    <div class="space-y-1">
-                        <h4 class="text-sm font-bold text-amber-400">B. DIAGNÓSTICO DO STATUS OPERACIONAL</h4>
-                        <p class="text-xs text-slate-400">Assinale a condição de contorno atual do equipamento, baseada na correlação entre os esforços exigidos e os limites nominais de projeto.</p>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 gap-3">
-                        <!-- Opção 1 -->
-                        <div class="flex items-start gap-3 p-3.5 rounded-lg border border-slate-800 hover:border-emerald-500/50 hover:bg-emerald-950/20 transition-colors group">
-                            <span class="text-sm text-slate-300 leading-snug"><strong class="text-emerald-400 group-hover:text-emerald-300 transition-colors">REGIME NOMINAL (ESTÁVEL):</strong> Demanda de potência e alinhamento cinemático operando dentro das margens teóricas de segurança. Equipamento liberado para avanço contínuo.</span>
-                        </div>
-                        
-                        <!-- Opção 2 -->
-                        <div class="flex items-start gap-3 p-3.5 rounded-lg border border-slate-800 hover:border-amber-500/50 hover:bg-amber-950/20 transition-colors group">
-                            <span class="text-sm text-slate-300 leading-snug"><strong class="text-amber-400 group-hover:text-amber-300 transition-colors">RISCO ESTRUTURAL (FLEXÃO):</strong> Potência mecânica tolerável, porém com elevada energia elástica acumulada. Iminência de transição para deformação plástica irreversível da treliça.</span>
-                        </div>
-                        
-                        <!-- Opção 3 -->
-                        <div class="flex items-start gap-3 p-3.5 rounded-lg border border-slate-800 hover:border-rose-500/50 hover:bg-rose-950/20 transition-colors group">
-                            <span class="text-sm text-slate-300 leading-snug"><strong class="text-rose-400 group-hover:text-rose-300 transition-colors">SOBRECARGA ELETROMECÂNICA:</strong> A taxa de trabalho exigida superou a capacidade do motoredutor, induzindo falha por aquecimento térmico do estator (Efeito Joule).</span>
-                        </div>
-                        
-                        <!-- Opção 4 -->
-                        <div class="flex items-start gap-3 p-3.5 rounded-lg border border-slate-800 hover:border-red-600/50 hover:bg-red-950/20 transition-colors group">
-                            <span class="text-sm text-slate-300 leading-snug"><strong class="text-red-500 group-hover:text-red-400 transition-colors">COLAPSO SISTÊMICO:</strong> Limites de potência nominal e de escoamento estrutural rompidos simultaneamente. Falha crítica multivariável.</span>
-                        </div>
-                    </div>
-                </div>
-
-                
-                <!-- C. RECOMENDAÇÃO TÉCNICA -->
-                <div class="bg-slate-950/60 rounded-xl p-4 sm:p-5 border border-slate-800/80 space-y-4 shadow-lg">
-                    <div class="space-y-2">
-                        <h4 class="text-sm font-bold text-brand-400">C. DIRETRIZ DE INTERVENÇÃO E MITIGAÇÃO TÉCNICA</h4>
-                        <p class="text-xs text-slate-400 leading-relaxed bg-slate-900/60 p-3 rounded-lg border border-slate-800/50">
-                            Com base no diagnóstico estabelecido, defina o plano de ação (imediato e/ou estrutural) necessário para preservar a integridade do equipamento e restabelecer o regime seguro de operação. <br>
-                            <span class="italic opacity-80 mt-1 inline-block">(Ex: Drenagem do vão para supressão da carga hídrica inercial na rampa? Retrofit do sistema motriz para elevação da potência nominal? Sistematização topográfica do talhão? Adoção de rodados de alta tração (High Flotation) para mitigar o slip e o atraso cinemático?)</span>
-                        </p>
-                    </div>
-                    
-                </div>
-
-
-            </div>
-        </section>
-        <!-- ---------------------------------------------------------------------------------------------------- -->
     
 
+    <!-- ================================================================== -->
+    <!-- FOLHA 01: CAPA E DESAFIO (MÓDULO 1)                                -->
+    <!-- ================================================================== -->
+    <div class="folha-a4 esconder-na-impressao">
+        
+<!-- Cabeçalho Oficial -->
+        <header class="border-b-2 border-brand-600 pb-6 mb-8 print:border-brand-600">
+            <!-- Adicionado print:flex-row e print:justify-between para forçar layout lado a lado no PDF -->
+            <div class="flex flex-col md:flex-row print:flex-row md:justify-between print:justify-between md:items-start print:items-start gap-6 mb-8">
+                
+                <!-- Título -->
+                <div class="flex-1">
+                    <h1 class="text-2xl md:text-3xl print:text-3xl font-extrabold uppercase tracking-tight text-slate-900 leading-tight">
+                        Física Geral
+                    </h1>
+                </div>
 
-    <!-- Rodapé -->
-    <footer class="border-t border-slate-900 bg-slate-950 py-8 px-6">
-        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-            <span>Plataforma de Investigação e Diagnóstico Técnico</span>
-            <span>&copy; 2026 Todos os direitos reservados.</span>
+                <!-- Box de Conceitos -->
+                <div class="shrink-0 bg-slate-50 border border-slate-200 rounded-lg p-3 shadow-sm min-w-[200px] print:bg-slate-50 print:border-slate-300">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 print:text-slate-500">Conceitos Base</p>
+                    <div class="flex flex-col gap-1.5">
+                        <span class="text-xs font-mono font-medium text-slate-700 bg-white border border-slate-100 px-2 py-1 rounded flex items-center gap-2 print:border-slate-300">
+                            <!-- Adicionado style color-adjust para a bolinha não sumir no PDF -->
+                            <div class="w-1.5 h-1.5 rounded-full bg-brand-500 shrink-0" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;"></div> Trabalho
+                        </span>
+                        <span class="text-xs font-mono font-medium text-slate-700 bg-white border border-slate-100 px-2 py-1 rounded flex items-center gap-2 print:border-slate-300">
+                            <div class="w-1.5 h-1.5 rounded-full bg-brand-500 shrink-0" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;"></div> Energia
+                        </span>
+                        <span class="text-xs font-mono font-medium text-slate-700 bg-white border border-slate-100 px-2 py-1 rounded flex items-center gap-2 print:border-slate-300">
+                            <div class="w-1.5 h-1.5 rounded-full bg-brand-500 shrink-0" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;"></div> Potência
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+<!-- TÍTULO E ESCOPO -->
+        <header class="mb-10 text-center">
+            <h2 class="text-xl font-bold text-slate-800 mb-2">Pivô Central em Aclive</h2>
+            <p class="text-sm text-slate-700">
+                <strong class="font-sans text-sm text-brand-700 uppercase">Objetivo da Investigação:</strong> 
+                O objetivo da investigação é analisar e compreender a dinâmica e as forças que atuam sobre um sistema de 
+                irrigação por pivô central quando ele opera em terrenos acidentados (aclives). Através de simulação física 
+                computacional e modelagem matemática, o estudo busca isolar e quantificar os esforços mecânicos, cinemáticos 
+                e o acúmulo de energia elástica que o equipamento sofre durante a subida, a fim de entender como esses fatores 
+                causam sobrecarga de potência motriz, desalinhamentos estruturais e colapso mecânico.
+            </p>
+        </header>
+
+
+
+<!-- ================================================================== -->
+        <!-- MÓDULO 1: DESAFIO REAL E MODELAGEM MENTAL                          -->
+        <!-- ================================================================== -->
+        <section>
+            
+            <!-- Cabeçalho do Módulo (Idêntico ao original) -->
+            <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-slate-300 pb-2 mb-6">
+                <h3 class="font-sans font-bold text-base uppercase text-slate-900 tracking-wide">
+                    I. Desafio Real e Modelagem
+                </h3>
+                <span class="font-sans text-xs font-black uppercase tracking-widest px-3 py-1 bg-brand-50 text-brand-700 border border-brand-200 rounded w-fit">
+                    Módulo I
+                </span>
+            </header>
+            
+            <!-- Problema Real: Narrativa -->
+            <p class="text-sm text-slate-700 mb-3">
+                Durante a operação de sistemas de irrigação por pivô central em áreas de topografia acidentada, o equipamento é 
+                submetido a condições <strong class="text-slate-900">cinemáticas</strong> e <strong class="text-slate-900">dinâmicas complexas</strong>.
+                A estrutura treliçada possui uma elevada massa linear, condição que é maximizada quando a tubulação se encontra 
+                pressurizada e operando em carga plena de água. Em terrenos planos, a translação ocorre sob um balanço de forças 
+                relativamente estável, exigindo dos motoredutores apenas a superação da <strong class="text-slate-900">inércia</strong> 
+                e do <strong class="text-slate-900">atrito de rolamento</strong>.
+            </p>
+
+            <p class="text-sm text-slate-700 mb-6">
+                No entanto, durante a transposição de aclives severos pelas torres intermediárias, o sistema depara-se com uma 
+                alteração crítica no balanço de forças. O equipamento passa a exigir um incremento substancial de trabalho mecânico 
+                para superar a componente tangencial da força peso que atua contra o sentido do deslocamento. Essa solicitação extrema 
+                compromete a estabilidade operacional: a tração exigida pode superar o atrito estático pneu-solo, induzindo à patinagem, 
+                ao desalinhamento angular entre os vãos e à transferência de tensões mecânicas severas para a estrutura, levando o 
+                sistema ao limite de sua potência elétrica e resistência mecânica.
+            </p>    
+
+
+            <!-- Bloco: Mecânica do Colapso (Estilo 'Ensaios' original com barra absoluta) -->
+            <div class="evitar-quebra border border-slate-200 rounded-lg p-5 relative bg-white shadow-sm mb-6">
+                <!-- Barra colorida lateral -->
+                <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-amber-500 rounded-l-lg"></div>
+                
+                <h4 class="font-sans font-bold text-sm uppercase text-slate-800 mb-3 flex items-center gap-2">
+                    <span class="bg-amber-100 text-amber-700 px-2.5 py-1 rounded text-xs tracking-wider">Dinâmica</span> 
+                    Mecânica do Desequilíbrio
+                </h4>
+                
+                <p class="text-sm text-slate-700 mb-4 leading-relaxed">
+                    Em regime de operação nominal durante um aclive, os motoredutores do pivô central convertem 
+                    <strong class="text-slate-900">Energia Elétrica</strong>
+                    em energia mecânica para tracionar a estrutura. O sistema realiza um 
+                    <strong class="text-slate-900">Trabalho Mecânico ($W$)</strong>
+                    para superar a componente tangencial da força da gravidade, o que resulta no incremento contínuo da 
+                    <strong class="text-slate-900">Energia Potencial Gravitacional ($E_p$)</strong> da massa deslocada.
+                </p>
+
+                <p class="text-sm text-slate-700 mb-5 leading-relaxed">
+                    A estabilidade desse balanço é comprometida quando a inclinação topográfica excede o limite de tração das rodas, 
+                    ou quando ocorre perda de atrito estático com o solo. A redução da velocidade linear gera um atraso cinemático 
+                    da torre. A partir deste evento, o desequilíbrio se propaga em duas frentes de estresse:
+                </p>
+
+                <!-- Lista customizada (Exatamente igual à lista da Seção II original) -->
+                <ul class="space-y-4 pl-4 border-l border-slate-300 ml-2 mb-4 text-sm text-slate-700 print:border-slate-300">
+                    <li class="pl-4 relative">
+                        <div class="absolute w-2 h-2 bg-amber-500 rounded-full -left-[5px] top-2 shrink-0" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;"></div>
+                        <strong class="text-slate-900">Acúmulo de Energia Elástica (Tensão Estrutural):</strong> 
+                        O atraso relativo da torre impõe uma tensão de flexão à treliça metálica de interligação. A tubulação passa a acumular 
+                        <strong class="text-slate-900">Energia Potencial Elástica</strong>, originando um vetor de força de arrasto lateral que atua em oposição ao sentido de deslocamento.
+                    </li>
+                    <li class="pl-4 relative">
+                        <div class="absolute w-2 h-2 bg-rose-500 rounded-full -left-[5px] top-2 shrink-0" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;"></div>
+                        <strong class="text-slate-900">Pico de Potência Exigida:</strong> 
+                        Para compensar o déficit de velocidade e superar a somatória das forças resistivas, o sistema demanda um aumento imediato na realização de 
+                        <strong class="text-slate-900">Trabalho</strong>. Como a <strong class="text-slate-900">Potência ($P$)</strong>
+                        é a taxa de transferência de trabalho no tempo $\left(P = \frac{\Delta W}{\Delta t}\right)$, o aumento súbito na solicitação de torque eleva a potência mecânica do motoredutor, aproximando-o do seu limite.
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Bloco: Consequência / Colapso -->
+            <div class="evitar-quebra border border-slate-200 rounded-lg p-5 relative bg-white shadow-sm mb-6">
+                <!-- Barra colorida lateral vermelha -->
+                <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-rose-500 rounded-l-lg"></div>
+                
+                <h4 class="font-sans font-bold text-sm uppercase text-slate-800 mb-2 flex items-center gap-2">
+                    <span class="bg-rose-100 text-rose-700 px-2.5 py-1 rounded text-xs tracking-wider">Alerta Crítico</span> 
+                    O Colapso Mecânico
+                </h4>
+                
+                <p class="text-sm text-slate-700 leading-relaxed">
+                    Quando a potência exigida pelo trabalho de tração supera a capacidade nominal do motoredutor, o equipamento apresenta 
+                    <strong class="text-slate-900">falha por sobrecarga</strong>. Este evento resulta no acionamento dos relés de proteção 
+                    térmica (desarme elétrico) ou, sob manutenção prolongada da carga, na transição da estrutura metálica do regime 
+                    elástico para a deformação plástica, culminando em colapso mecânico. Adicionalmente, o <strong class="text-slate-900">downtime</strong> 
+                    gera impacto agronômico severo, interrompendo a lâmina d'água em janelas críticas e causando prejuízos por estresse hídrico na cultura.
+                </p>
+            </div>
+
+            <!-- Bloco: Meta do Diagnóstico (Exatamente igual ao "Meta do Diagnóstico" original) -->
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-lg mb-6">
+                <p class="text-sm text-slate-700">
+                    <strong class="font-sans text-brand-600 uppercase">Meta do Diagnóstico:</strong> 
+                    A meta do diagnóstico é fundamentar a tomada de decisão agronômica e operacional. 
+                    O objetivo prático dessa etapa é utilizar os dados dinâmicos avaliados no simulador 
+                    (como Trabalho, Potência e Força de Arrasto) para diagnosticar o status da máquina, 
+                    determinando assim qual plano de ação ou intervenção técnica será necessário para 
+                    preservar a integridade física do equipamento e fazê-lo voltar a operar de maneira 
+                    segura e estável.
+                </p>
+            </div>
+            
+        </section>
+
+<!-- ================================================================== -->
+        <!-- REGISTROS VISUAIS (Imagens no PDF, Vídeos apenas na tela)          -->
+        <!-- ================================================================== -->
+        <h3 class="font-sans font-bold text-xs uppercase text-slate-500 mb-3 flex items-center gap-2 mt-8">
+            <i data-lucide="camera" class="w-4 h-4"></i> Acervo Multimídia da Ocorrência
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 matriz-midia mb-8">
+            
+            <!-- LINHA 1: Imagens Estáticas (Aparecem no PDF) -->
+            <div class="box-imagem h-64 bg-slate-100 rounded-lg overflow-hidden border border-slate-300 shadow-sm relative group">
+                <img src="https://github.com/neybarraz/site/blob/main/imagens/pivo_central_01.png?raw=true" alt="Inspeção 1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                <div class="absolute bottom-0 left-0 right-0 bg-slate-900/70 text-white text-[10px] uppercase tracking-wider p-1.5 text-center esconder-na-impressao">
+                    Registro Fotográfico 01
+                </div>
+            </div>
+            
+            <div class="box-imagem h-64 bg-slate-100 rounded-lg overflow-hidden border border-slate-300 shadow-sm relative group">
+                <img src="https://github.com/neybarraz/site/blob/main/imagens/pivo_central_02.png?raw=true" alt="Inspeção 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                <div class="absolute bottom-0 left-0 right-0 bg-slate-900/70 text-white text-[10px] uppercase tracking-wider p-1.5 text-center esconder-na-impressao">
+                    Registro Fotográfico 02
+                </div>
+            </div>
+
+            <!-- LINHA 2: Vídeos (Ocultos no PDF automaticamente) -->
+            <div class="aspect-video bg-slate-800 rounded-lg overflow-hidden esconder-na-impressao border border-slate-300 shadow-sm">
+                <iframe class="w-full h-full" src="https://www.youtube.com/embed/NtWOVFTaIuA" frameborder="0" allowfullscreen></iframe>
+            </div>
+            
+            <div class="aspect-video bg-slate-800 rounded-lg overflow-hidden esconder-na-impressao border border-slate-300 shadow-sm">
+                <iframe class="w-full h-full" src="https://www.youtube.com/embed/ykwhha32xQ0" frameborder="0" allowfullscreen></iframe>
+            </div>
+            
         </div>
-    </footer>
 
-    <!-- Inicialização dos Ícones -->
+
+
+<!-- ================================================================== -->
+        <!-- MÓDULO I: TOPOLOGIA DO SISTEMA E VOLUME DE CONTROLE                -->
+        <!-- ================================================================== -->
+        <section class="mt-10">
+            <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-slate-300 pb-2 mb-6">
+                <h3 class="font-sans font-bold text-base uppercase text-slate-900 tracking-wide">
+                    II. Topologia do Sistema e Volume de Controle
+                </h3>
+                <span class="font-sans text-xs font-black uppercase tracking-widest px-3 py-1 bg-brand-50 text-brand-700 border border-brand-200 rounded w-fit">
+                    Módulo I
+                </span>
+            </header>
+
+            <p class="text-sm text-slate-700 mb-4">
+                Para modelar o balanço energético e os esforços mecânicos de um equipamento de grande porte distribuído pelo terreno, o método isola um trecho representativo de atuação crítica:
+            </p>
+
+            <ul class="space-y-4 pl-4 border-l border-slate-300 ml-2 mb-8 text-sm text-slate-700 print:border-slate-300">
+                <li class="pl-4 relative">
+                    <div class="absolute w-2 h-2 bg-slate-800 rounded-full -left-[5px] top-2 shrink-0" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;"></div>
+                    <strong class="text-slate-900">Fronteira Espacial (Volume de Controle):</strong> 
+                    Restrito exclusivamente a uma unidade motriz (torre de tração) e seus dois vãos estruturais adjacentes. Essa delimitação espacial permite isolar e quantificar as interações cinemáticas, os esforços dinâmicos e o acúmulo de energia manifestados pontualmente na rampa.
+                </li>
+                <li class="pl-4 relative">
+                    <div class="absolute w-2 h-2 bg-brand-500 rounded-full -left-[5px] top-2 shrink-0" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;"></div>
+                    <strong class="text-slate-900">Estágio Gerador (Fonte de Potência):</strong> 
+                    O Motoredutor. Converte a potência elétrica em torque mecânico para tracionar a estrutura e vencer as resistências do terreno.
+                </li>
+                <li class="pl-4 relative">
+                    <div class="absolute w-2 h-2 bg-emerald-500 rounded-full -left-[5px] top-2 shrink-0" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;"></div>
+                    <strong class="text-slate-900">Nó de Acoplamento Cinemático (Ramo Principal):</strong> 
+                    A interface Pneu-Solo. O contato físico viabiliza o deslocamento ($\Delta d$). É onde a força de tração se converte em trabalho mecânico efetivo.
+                </li>
+                <li class="pl-4 relative">
+                    <div class="absolute w-2 h-2 bg-amber-500 rounded-full -left-[5px] top-2 shrink-0" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;"></div>
+                    <strong class="text-slate-900">Ramificação Reativa (Armazenamento de Energia):</strong> 
+                    A Treliça Metálica (Vãos). Atua como um acumulador de energia potencial elástica de torção ($U_e$) quando ocorre atraso angular (desalinhamento) entre as torres, gerando um vetor de força de arrasto lateral indesejado.
+                </li>
+                <li class="pl-4 relative">
+                    <div class="absolute w-2 h-2 bg-rose-500 rounded-full -left-[5px] top-2 shrink-0" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;"></div>
+                    <strong class="text-slate-900">Zona de Dissipação e Limite Crítico:</strong> 
+                    O Painel de Segurança e o Contato Mecânico. Onde o excesso de torque ou de deflexão angular atinge o limite do material, resultando em desarme térmico ou colapso estrutural.
+                </li>
+            </ul>
+        </section>
+
+
+<!-- ================================================================== -->
+        <!-- MATRIZ DE VARIÁVEIS E GRANDEZAS FÍSICAS                          -->
+        <!-- ================================================================== -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-slate-300 pb-2 mb-6 mt-10">
+            <h3 class="font-sans font-bold text-base uppercase text-slate-900 tracking-wide flex items-center gap-2">
+                <i data-lucide="table" class="w-5 h-5 text-brand-600"></i> III. Matriz de Variáveis e Grandezas Físicas
+            </h3>
+            <span class="font-sans text-xs font-black uppercase tracking-widest px-3 py-1 bg-brand-50 text-brand-700 border border-brand-200 rounded w-fit shrink-0">
+                Módulo I
+            </span>
+        </div>
+
+        <p class="text-sm text-slate-700 mb-6 text-justify">
+            Para a execução do diagnóstico computacional e a modelagem do volume de controle, é imperativo o
+            domínio dos parâmetros físicos que regem o fenômeno mecânico e estrutural do pivô central. O modelo analisado é governado
+            pela seguinte matriz de variáveis:
+        </p>
+
+        <table class="w-full text-left border-collapse mb-8">
+            <thead class="bg-slate-50 border-b-2 border-slate-300 text-xs uppercase tracking-wider text-slate-700" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;">
+                <tr>
+                    <th class="w-[25%] py-3 px-4 font-bold text-slate-900 align-middle">Componente Físico</th>
+                    <th class="w-[25%] py-3 px-4 font-bold text-slate-900 align-middle text-center">Grandeza (Símbolo)</th>
+                    <th class="w-[50%] py-3 px-4 font-bold text-slate-900 align-middle">Papel no Sistema (Função)</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm text-slate-700">
+                
+                <!-- Linha 1 -->
+                <tr class="border-b border-slate-200 last:border-0 print:border-slate-300 hover:bg-slate-50/50 transition-colors">
+                    <td class="py-4 px-4 align-top">
+                        <strong class="text-slate-900 block">Massa da Torre + Água</strong> 
+                        <span class="text-slate-500 text-xs font-mono">($m$)</span>
+                    </td>
+                    <td class="py-4 px-4 align-top text-center font-mono">
+                        <span class="block text-[10px] uppercase tracking-wider text-slate-500 mb-1 font-sans">Energia Potencial</span>
+                        <strong class="text-sm text-slate-900">$$E_p = m \cdot g \cdot h$$</strong>
+                    </td>
+                    <td class="py-4 px-4 align-top text-justify">
+                        <strong class="text-slate-900">Carga Inercial e Gravitacional:</strong> 
+                        Representa o peso próprio estrutural somado à carga operacional de água. A demanda de trabalho 
+                        gravitacional é diretamente proporcional à elevação topográfica ($h$).
+                    </td>
+                </tr>
+
+                <!-- Linha 2 -->
+                <tr class="border-b border-slate-200 last:border-0 print:border-slate-300 hover:bg-slate-50/50 transition-colors">
+                    <td class="py-4 px-4 align-top">
+                        <strong class="text-slate-900 block">Pneus / Deslocamento</strong> 
+                        <span class="text-slate-500 text-xs font-mono">($\Delta d$)</span>
+                    </td>
+                    <td class="py-4 px-4 align-top text-center font-mono">
+                        <span class="block text-[10px] uppercase tracking-wider text-slate-500 mb-1 font-sans">Trabalho Mecânico</span>
+                        <strong class="text-sm text-slate-900">$$W = F \cdot \Delta d$$</strong>
+                    </td>
+                    <td class="py-4 px-4 align-top text-justify">
+                        <strong class="text-slate-900">Interface de Tração (Cinemática):</strong> 
+                        O contato pneu-solo possibilita o deslocamento ($\Delta d$). É a variável física que converte a 
+                        força de tração gerada no Trabalho Mecânico efetivo e final exigido da máquina.
+                    </td>
+                </tr>
+
+                <!-- Linha 3 -->
+                <tr class="border-b border-slate-200 last:border-0 print:border-slate-300 hover:bg-slate-50/50 transition-colors">
+                    <td class="py-4 px-4 align-top">
+                        <strong class="text-slate-900 block">Treliça Metálica / Vão</strong>
+                    </td>
+                    <td class="py-4 px-4 align-top text-center font-mono">
+                        <span class="block text-[10px] uppercase tracking-wider text-slate-500 mb-1 font-sans">Energia Elástica</span>
+                        <strong class="text-sm text-slate-900">$$W_{\text{el}}$$</strong>
+                    </td>
+                    <td class="py-4 px-4 align-top text-justify">
+                        <strong class="text-slate-900">Acumulador Reativo (Tensão):</strong> 
+                        A estrutura atua como um sistema elástico. O desalinhamento angular causa flexão, acumulando energia 
+                        e gerando um vetor de força lateral de arrasto que aumenta a demanda resistiva.
+                    </td>
+                </tr>
+
+                <!-- Linha 4 -->
+                <tr class="border-b border-slate-200 last:border-0 print:border-slate-300 hover:bg-slate-50/50 transition-colors">
+                    <td class="py-4 px-4 align-top">
+                        <strong class="text-slate-900 block">Motoredutor</strong>
+                    </td>
+                    <td class="py-4 px-4 align-top text-center font-mono">
+                        <span class="block text-[10px] uppercase tracking-wider text-slate-500 mb-1 font-sans">Potência</span>
+                        <strong class="text-sm text-slate-900">$$P = \frac{W}{\Delta t}$$</strong>
+                    </td>
+                    <td class="py-4 px-4 align-top text-justify">
+                        <strong class="text-slate-900">Fonte de Potência Ativa:</strong> 
+                        Converte potência elétrica ($P_{\text{elétrica}} = V \cdot I$) em tração mecânica no solo.
+                    </td>
+                </tr>
+
+                <!-- Linha 5 -->
+                <tr class="border-b border-slate-200 last:border-0 print:border-slate-300 hover:bg-slate-50/50 transition-colors">
+                    <td class="py-4 px-4 align-top">
+                        <strong class="text-slate-900 block">Painel / Sensor de Ângulo</strong> 
+                        <span class="text-slate-500 text-xs font-mono">($\theta$)</span>
+                    </td>
+                    <td class="py-4 px-4 align-top text-center font-mono">
+                        <span class="block text-[10px] uppercase tracking-wider text-slate-500 mb-1 font-sans">Árbitro de Desalinhamento</span>
+                        <strong class="text-sm text-slate-900">Limitador</strong>
+                    </td>
+                    <td class="py-4 px-4 align-top text-justify">
+                        <strong class="text-slate-900">Limitador de Segurança:</strong> 
+                        Corta a alimentação elétrica do motoredutor caso o desvio angular atinja a margem de tolerância do projeto, 
+                        atuando preventivamente antes do limite de escoamento do material.
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+
+
+
+<!-- ================================================================== -->
+        <!-- IV. PAINEL DE CONTROLE E COLETA DE DADOS (MÓDULO II)               -->
+        <!-- ================================================================== -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-slate-300 pb-2 mb-6 mt-10">
+            <h3 class="font-sans font-bold text-base uppercase text-slate-900 tracking-wide">
+                IV. Painel de Controle e Coleta de Dados
+            </h3>
+            <span class="font-sans text-xs font-black uppercase tracking-widest px-3 py-1 bg-brand-50 text-brand-700 border border-brand-200 rounded w-fit shrink-0">
+                Módulo II
+            </span>
+        </div>
+
+        <p class="text-sm text-slate-700 mb-6 text-justify leading-relaxed">
+            Nesta etapa prática, você assumirá o controle do ambiente de simulação. O modelo computacional 
+            foi desenvolvido para calcular, em tempo real, o comportamento dinâmico do pivô central em aclives, 
+            permitindo analisar a interação vetorial entre a massa da estrutura, a inclinação topográfica, o trabalho mecânico 
+            e os picos de potência exigidos dos motoredutores.
+        </p>
+
+        <!-- Caixa de Acesso ao Simulador (Esconde na impressão) -->
+        <div class="bg-slate-50 border border-slate-300 p-4 rounded-lg mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 esconder-na-impressao shadow-sm">
+            <div class="flex items-center gap-3">
+                <div class="bg-brand-100 p-2 rounded-md shrink-0">
+                    <i data-lucide="cpu" class="w-5 h-5 text-brand-600"></i>
+                </div>
+                <div>
+                    <h4 class="font-sans font-bold text-sm text-slate-800 uppercase">Motor Computacional</h4>
+                    <p class="text-xs text-slate-600 mt-0.5">Acesse o notebook no Google Colab para executar as baterias de testes.</p>
+                </div>
+            </div>
+
+            <a href="https://colab.research.google.com/drive/1hDL3zr0QNUscZvHm-3_PJsx7cCAOtJgY?usp=sharing" target="_blank" class="shrink-0 inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-sans font-bold text-xs px-5 py-2.5 rounded shadow transition-colors">
+                Abrir Simulador <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            </a>
+        </div>
+
+
+<!-- ================================================================== -->
+        <!-- ROTEIRO DE ENSAIOS E MATRIZES DE COLETA DE DADOS                   -->
+        <!-- ================================================================== -->
+        <p class="font-bold font-sans text-sm mb-3 mt-6">Roteiros de Simulação (Ensaios):</p>
+        <p class="text-sm text-slate-700 mb-6 leading-relaxed text-justify">
+            Os roteiros de simulação abaixo definem as condições de contorno para cada ensaio. 
+            Utilize o simulador interativo para reproduzir os cenários, extrair as variáveis mecânicas 
+            quantitativas (Trabalho, Potência e Energia de Deformação) e submeter seus diagnósticos 
+            nas matrizes de coleta.
+        </p>
+
+        <div class="space-y-8 mb-8">
+            
+            <!-- ENSAIO 1 -->
+            <div class="evitar-quebra border border-slate-200 rounded-lg p-5 relative bg-white shadow-sm">
+                <!-- Barra colorida lateral -->
+                <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-brand-500 rounded-l-lg"></div>
+                
+                <h4 class="font-sans font-bold text-sm uppercase text-slate-800 mb-3 flex items-center gap-2">
+                    <span class="bg-brand-100 text-brand-700 px-2.5 py-1 rounded text-xs tracking-wider">Ensaio 1</span> 
+                    O Componente Gravitacional (Aclive Ideal)
+                </h4>
+                
+                <p class="text-sm text-slate-700 mb-4 leading-relaxed text-justify">
+                    O objetivo deste primeiro ensaio é isolar a variável topográfica. Você quantificará a demanda de 
+                    Potência Mecânica exigida estritamente em função da componente tangencial do peso, assumindo que 
+                    a cinemática do equipamento permanece perfeitamente alinhada com o eixo central.
+                </p>
+
+                <!-- Bloco de Parametrização -->
+                <div class="bg-slate-50 border border-slate-200 rounded-md p-3.5 text-sm font-sans flex items-start gap-3 mb-6">
+                    <i data-lucide="settings" class="w-5 h-5 text-brand-600 shrink-0 mt-0.5"></i>
+                    <p class="text-slate-700 text-justify">
+                        <strong class="text-slate-900 uppercase text-xs tracking-wider block mb-1">Parametrização:</strong> 
+                        Configure o sistema com Massa = 5.0 ton e Desalinhamento = 0°. Incremente o slider de Inclinação 
+                        da Colina conforme a tabela de aferição abaixo e registre os resultados apontados no diagnóstico.
+                    </p>
+                </div>
+
+                <!-- Tabela de Coleta - Ensaio 1 -->
+                <table class="w-full mb-2">
+                    <thead class="bg-slate-50 text-[10px] uppercase tracking-wider text-slate-700 border-y border-slate-200" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;">
+                        <tr>
+                            <th class="w-[25%] p-3 text-left align-middle font-bold text-slate-800">Inclinação ($\theta$)</th>
+                            <th class="w-[25%] p-3 text-center align-middle">Força Gravitacional <br><span class="font-mono normal-case text-slate-500">($F_{grav}$) [kN]</span></th>
+                            <th class="w-[25%] p-3 text-center align-middle">Potência Mecânica <br><span class="font-mono normal-case text-slate-500">[kW]</span></th>
+                            <th class="w-[25%] p-3 text-center align-middle">Status Operacional</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm">
+                        <tr class="evitar-quebra border-b border-slate-200">
+                            <td class="p-3 align-middle font-bold text-slate-800">0° <span class="text-xs text-slate-500 font-normal">(Plano)</span></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="____"></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="____"></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="OK / Alerta"></td>
+                        </tr>
+                        <tr class="evitar-quebra border-b border-slate-200 bg-slate-50/50">
+                            <td class="p-3 align-middle font-bold text-slate-800">10°</td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="____"></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="____"></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="OK / Alerta"></td>
+                        </tr>
+                        <tr class="evitar-quebra border-b border-slate-200">
+                            <td class="p-3 align-middle font-bold text-slate-800">20°</td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="____"></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="____"></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="OK / Alerta"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ENSAIO 2 -->
+            <div class="evitar-quebra border border-slate-200 rounded-lg p-5 relative bg-white shadow-sm">
+                <!-- Barra colorida lateral -->
+                <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-amber-500 rounded-l-lg"></div>
+                
+                <h4 class="font-sans font-bold text-sm uppercase text-slate-800 mb-3 flex items-center gap-2">
+                    <span class="bg-amber-100 text-amber-700 px-2.5 py-1 rounded text-xs tracking-wider">Ensaio 2</span> 
+                    O Componente de Deformação Elástica (Arrasto)
+                </h4>
+                
+                <p class="text-sm text-slate-700 mb-4 leading-relaxed text-justify">
+                    Neste segundo ensaio, introduz-se o estresse por atraso cinemático (decorrente de patinagem). 
+                    O sistema exige que o motoredutor supere não apenas a componente gravitacional de uma colina moderada, 
+                    mas também a massiva força de arrasto gerada pela energia potencial elástica acumulada durante a flexão da treliça.
+                </p>
+
+                <!-- Bloco de Parametrização -->
+                <div class="bg-slate-50 border border-slate-200 rounded-md p-3.5 text-sm font-sans flex items-start gap-3 mb-6">
+                    <i data-lucide="settings" class="w-5 h-5 text-amber-600 shrink-0 mt-0.5"></i>
+                    <p class="text-slate-700 text-justify">
+                        <strong class="text-slate-900 uppercase text-xs tracking-wider block mb-1">Parametrização:</strong> 
+                        Fixe as variáveis de contorno em Massa = 4.0 ton e Inclinação = 10°. Incremente progressivamente 
+                        o slider de Desalinhamento da Treliça para simular o atraso da torre. Registre a evolução da demanda 
+                        energética e a transição crítica do status operacional.
+                    </p>
+                </div>
+
+                <!-- Tabela de Coleta - Ensaio 2 -->
+                <table class="w-full mb-2">
+                    <thead class="bg-slate-50 text-[9px] uppercase tracking-wider text-slate-700 border-y border-slate-200" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;">
+                        <tr>
+                            <th class="w-[20%] p-3 text-left align-middle font-bold text-slate-800">Desalinhamento ($\Delta\alpha$)</th>
+                            <th class="w-[20%] p-3 text-center align-middle">Arrasto Elástico <br><span class="font-mono normal-case text-slate-500">($F_{arrasto}$) [kN]</span></th>
+                            <th class="w-[20%] p-3 text-center align-middle">Tração Total <br><span class="font-mono normal-case text-slate-500">($F_{total}$) [kN]</span></th>
+                            <th class="w-[20%] p-3 text-center align-middle">Potência Exigida <br><span class="font-mono normal-case text-slate-500">[kW]</span></th>
+                            <th class="w-[20%] p-3 text-center align-middle">Status Operacional</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm">
+                        <tr class="evitar-quebra border-b border-slate-200">
+                            <td class="p-3 align-middle font-bold text-slate-800">0° <span class="text-[10px] text-slate-500 font-normal block">(Alinhado)</span></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="____"></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="____"></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="____"></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="OK / Alerta"></td>
+                        </tr>
+                        <tr class="evitar-quebra border-b border-slate-200 bg-slate-50/50">
+                            <td class="p-3 align-middle font-bold text-amber-600">5° <span class="text-[10px] text-slate-500 font-normal block">(Atraso Médio)</span></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="____"></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="____"></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="____"></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="OK / Alerta"></td>
+                        </tr>
+                        <tr class="evitar-quebra border-b border-slate-200">
+                            <td class="p-3 align-middle font-bold text-rose-600">12° <span class="text-[10px] text-slate-500 font-normal block">(Torção Severa)</span></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="____"></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="____"></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="____"></td>
+                            <td class="p-2 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2" placeholder="OK / Alerta"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ENSAIO 3 -->
+            <div class="evitar-quebra border border-slate-200 rounded-lg p-5 relative bg-white shadow-sm">
+                <!-- Barra colorida lateral -->
+                <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-rose-500 rounded-l-lg"></div>
+                
+                <h4 class="font-sans font-bold text-sm uppercase text-slate-800 mb-3 flex items-center gap-2">
+                    <span class="bg-rose-100 text-rose-700 px-2.5 py-1 rounded text-xs tracking-wider">Ensaio 3</span> 
+                    Determinação do Limite Operacional (Colapso)
+                </h4>
+                
+                <p class="text-sm text-slate-700 mb-4 leading-relaxed text-justify">
+                    Neste ensaio final, o objetivo é extrapolar os limites de engenharia do equipamento. Sabendo que o motoredutor 
+                    possui uma capacidade nominal máxima de projeto de 1.50 kW, você deverá mapear a pior combinação de estresse físico 
+                    que leva o sistema à ruptura simultânea (Falha Energética e Deformação Estrutural Crítica).
+                </p>
+
+                <!-- Bloco de Parametrização -->
+                <div class="bg-slate-50 border border-slate-200 rounded-md p-3.5 text-sm font-sans flex items-start gap-3 mb-6">
+                    <i data-lucide="settings" class="w-5 h-5 text-rose-600 shrink-0 mt-0.5"></i>
+                    <p class="text-slate-700 text-justify">
+                        <strong class="text-slate-900 uppercase text-xs tracking-wider block mb-1">Parametrização:</strong> 
+                        Modifique livremente as três variáveis independentes no simulador até induzir o diagnóstico crítico 
+                        de <strong class="text-rose-600 font-bold">🚨 COLAPSO TOTAL</strong>. Registre abaixo a configuração de 
+                        contorno exata que desencadeou esta falha multivariável.
+                    </p>
+                </div>
+
+                <!-- Tabela de Coleta - Ensaio 3 -->
+                <table class="w-full mb-2">
+                    <thead class="bg-rose-50 text-[9px] uppercase tracking-wider text-rose-900 border-y border-rose-200" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;">
+                        <tr>
+                            <th class="w-[25%] p-3 text-center align-middle font-bold">Carga Operacional <br><span class="font-mono normal-case text-rose-700">($m$) [ton]</span></th>
+                            <th class="w-[25%] p-3 text-center align-middle">Inclinação <br><span class="font-mono normal-case text-rose-700">($\theta$) [°]</span></th>
+                            <th class="w-[25%] p-3 text-center align-middle">Desalinhamento <br><span class="font-mono normal-case text-rose-700">($\Delta\alpha$) [°]</span></th>
+                            <th class="w-[25%] p-3 text-center align-middle">Potência Crítica <br><span class="font-mono normal-case text-rose-700">[kW]</span></th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm">
+                        <tr class="evitar-quebra border-b border-rose-200 bg-rose-50/20">
+                            <td class="p-3 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2.5 font-bold text-rose-700 border-rose-300 focus:border-rose-500 focus:bg-rose-50" placeholder="____"></td>
+                            <td class="p-3 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2.5 font-bold text-rose-700 border-rose-300 focus:border-rose-500 focus:bg-rose-50" placeholder="____"></td>
+                            <td class="p-3 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2.5 font-bold text-rose-700 border-rose-300 focus:border-rose-500 focus:bg-rose-50" placeholder="____"></td>
+                            <td class="p-3 align-middle"><input type="text" class="campo-preenchimento w-full text-center py-2.5 font-bold text-rose-700 border-rose-300 focus:border-rose-500 focus:bg-rose-50" placeholder="> 1.50 kW"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+
+<!-- ================================================================== -->
+        <!-- V. MATEMÁTICA E ANÁLISE CRÍTICA (MÓDULO III)                       -->
+        <!-- ================================================================== -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-slate-300 pb-2 mb-6 mt-10">
+            <h3 class="font-sans font-bold text-base uppercase text-slate-900 tracking-wide">
+                V. Fundamentação Matemático-Fenomenológica
+            </h3>
+            <span class="font-sans text-xs font-black uppercase tracking-widest px-3 py-1 bg-brand-50 text-brand-700 border border-brand-200 rounded w-fit shrink-0">
+                Módulo III
+            </span>
+        </div>
+
+        <p class="text-sm text-slate-700 mb-4 text-justify leading-relaxed">
+            Nesta etapa, formalizamos o comportamento dinâmico observado nos ensaios computacionais através de uma modelagem matemática determinística. O objetivo é elucidar as formulações algébricas que regem o simulador e estabelecer os limites de validade entre a aproximação analítica e as perturbações observadas na realidade de campo.
+        </p>
+
+        <p class="text-sm text-slate-700 mb-6 text-justify leading-relaxed">
+            O balanço energético da unidade motriz é estabelecido pela taxa temporal de realização de trabalho contra três vetores de resistência concomitantes. A somatória desses esforços quantifica a demanda instantânea de potência mecânica exigida do equipamento:
+        </p>
+
+        <div class="space-y-6 mb-8">
+            
+            <!-- Equação 1 -->
+            <div class="evitar-quebra">
+                <h4 class="font-sans font-bold text-sm text-slate-800">1. Componente Tangencial da Força Peso</h4>
+                <div class="bg-slate-50 p-4 my-2 flex justify-center font-mono text-sm border border-slate-200 rounded-lg shadow-sm overflow-x-auto">
+                    $$F_{gravidade} = m \cdot g \cdot \sin(\theta)$$
+                </div>
+                <p class="text-[13px] text-slate-600 text-justify leading-relaxed">
+                    Quantifica a solicitação gravitacional que atua paralelamente ao plano inclinado ($\theta$), impondo uma força reativa diretamente oposta ao vetor de deslocamento cinemático da máquina.
+                </p>
+            </div>
+
+            <!-- Equação 2 -->
+            <div class="evitar-quebra">
+                <h4 class="font-sans font-bold text-sm text-slate-800">2. Resistência ao Rolamento (Atrito Solo-Pneu)</h4>
+                <div class="bg-slate-50 p-4 my-2 flex justify-center font-mono text-sm border border-slate-200 rounded-lg shadow-sm overflow-x-auto">
+                    $$F_{rolamento} = \mu_{rol} \cdot m \cdot g \cdot \cos(\theta)$$
+                </div>
+                <p class="text-[13px] text-slate-600 text-justify leading-relaxed">
+                    Modela o esforço dissipativo necessário para vencer a deformação elasto-plástica na interface pneu-solo, sendo $\mu_{rol}$ o coeficiente empírico de resistência ao rolamento associado à força Normal ($N$).
+                </p>
+            </div>
+
+            <!-- Equação 3 -->
+            <div class="evitar-quebra">
+                <h4 class="font-sans font-bold text-sm text-slate-800">3. Arrasto por Deformação Elástica Estrutural</h4>
+                <div class="bg-slate-50 p-4 my-2 flex justify-center font-mono text-sm border border-slate-200 rounded-lg shadow-sm overflow-x-auto">
+                    $$F_{arrasto} = k_{estrutural} \cdot \Delta\alpha$$
+                </div>
+                <p class="text-[13px] text-slate-600 text-justify leading-relaxed">
+                    Descreve a resposta reativa da treliça metálica ao atraso cinemático angular ($\Delta\alpha$). A tubulação atua como um acumulador de energia potencial de torção ($U_e = \frac{1}{2} k_{\text{torção}} (\Delta\alpha)^2$), convertendo-se em um massivo vetor de arrasto lateral.
+                </p>
+            </div>
+
+            <!-- Equação 4 -->
+            <div class="evitar-quebra">
+                <h4 class="font-sans font-bold text-sm text-slate-800">4. Superposição de Forças (Tração Total)</h4>
+                <div class="bg-slate-50 p-4 my-2 flex justify-center font-mono text-sm border border-slate-200 rounded-lg shadow-sm overflow-x-auto">
+                    $$F_{total} = F_{rolamento} + F_{gravidade} + F_{arrasto}$$
+                </div>
+                <p class="text-[13px] text-slate-600 text-justify leading-relaxed">
+                    Aplica o princípio da superposição vetorial para consolidar todas as resistências dinâmicas que atuam em oposição ao sentido de deslocamento da máquina.
+                </p>
+            </div>
+
+            <!-- Equação 5 -->
+            <div class="evitar-quebra">
+                <h4 class="font-sans font-bold text-sm text-slate-800">5. Potência Mecânica Instantânea</h4>
+                <div class="bg-slate-50 p-4 my-2 flex justify-center font-mono text-sm border border-slate-200 rounded-lg shadow-sm overflow-x-auto">
+                    $$Pot_{mec} = F_{total} \cdot v = \frac{W_{total}}{\Delta t}$$
+                </div>
+                <p class="text-[13px] text-slate-600 text-justify leading-relaxed">
+                    Correlaciona o esforço total de tração com a velocidade linear constante de avanço ($v$), definindo a taxa de transferência de energia (demanda instantânea) imposta ao motoredutor.
+                </p>
+            </div>
+
+            <!-- Equação 6 -->
+            <div class="evitar-quebra">
+                <h4 class="font-sans font-bold text-sm text-slate-800">6. Condições de Contorno para Falha Sistêmica (Equilíbrio vs. Desarme)</h4>
+                <div class="bg-slate-50 p-4 my-2 flex justify-center font-mono text-sm border border-slate-200 rounded-lg shadow-sm overflow-x-auto">
+                    $$
+                    \begin{cases} 
+                    Pot_{mec} \le Pot_{nominal} \text{ e } \Delta\alpha < \Delta\alpha_{critico} & \implies \text{Regime Seguro (Operação Estável)} \\[10pt]
+                    Pot_{mec} > Pot_{nominal} \text{ ou } \Delta\alpha \ge \Delta\alpha_{critico} & \implies \text{Falha (Desarme Térmico / Colapso Estrutural)} 
+                    \end{cases}
+                    $$
+                </div>
+                <p class="text-[13px] text-slate-600 text-justify leading-relaxed">
+                    Estabelece os limites operacionais do projeto. A Potência Nominal ($Pot_{nominal}$) representa a capacidade máxima de fornecimento de energia contínua do motoredutor, enquanto o Desalinhamento Crítico ($\Delta\alpha_{critico}$) define a deflexão angular máxima permitida antes do limite de escoamento da treliça. A violação destes limiares transita o sistema do regime estável para a falha.
+                </p>
+            </div>
+
+        </div>
+
+
+<!-- ================================================================== -->
+        <!-- DIAGRAMA DE CAUSALIDADE (ENCADEAMENTO DETERMINÍSTICO)              -->
+        <!-- ================================================================== -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-slate-300 pb-2 mb-6 mt-10">
+            <h3 class="font-sans font-bold text-base uppercase text-slate-900 tracking-wide">
+                VI. Diagrama de Causalidade
+            </h3>
+            <span class="font-sans text-xs font-black uppercase tracking-widest px-3 py-1 bg-brand-50 text-brand-700 border border-brand-200 rounded w-fit shrink-0">
+                Módulo III
+            </span>
+        </div>      
+
+        <p class="text-sm text-slate-700 mb-4 text-justify leading-relaxed">
+            A propagação do estresse mecânico, desde a perturbação topográfica inicial até a sobrecarga elétrica da unidade motriz, pode ser mapeada pelo seguinte encadeamento determinístico:
+        </p>
+        
+        <!-- Fluxograma Matemático em KaTeX -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-6 overflow-x-auto flex justify-center text-sm text-slate-800 shadow-sm evitar-quebra mb-8">
+            $$
+            \begin{array}{c}
+            \boxed{\begin{array}{c} \text{Topografia e Carga} \\ (\theta, m) \end{array}} \xrightarrow{\;\text{Decomposição do Peso}\;} \boxed{\begin{array}{c} \text{Forças Resistivas} \\ (F_{grav} + F_{rol}) \end{array}} \\[15pt]
+            \xrightarrow{\;\text{Atraso da Torre}\;} \boxed{\begin{array}{c} \text{Deformação Elástica} \\ (F_{arrasto} \propto \Delta\alpha) \end{array}} \\[15pt]
+            \xrightarrow{\;W = \int F \, ds\;} \boxed{\begin{array}{c} \text{Trabalho Total} \\ (W_{total}) \end{array}} \\[15pt]
+            \xrightarrow{\;Pot = F \cdot v\;} \boxed{\begin{array}{c} \text{Potência Exigida} \\ (Pot_{mec} \text{ vs } Pot_{nom}) \end{array}}
+            \end{array}
+            $$
+        </div>
+
+<!-- ================================================================== -->
+        <!-- VII. ALCANCE VS. LIMITAÇÕES DA MODELAGEM (MÓDULO III)              -->
+        <!-- ================================================================== -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-slate-300 pb-2 mb-6 mt-10">
+            <h3 class="font-sans font-bold text-base uppercase text-slate-900 tracking-wide">
+                VII. Alcance vs. Limitações da Modelagem
+            </h3>
+            <span class="font-sans text-xs font-black uppercase tracking-widest px-3 py-1 bg-brand-50 text-brand-700 border border-brand-200 rounded w-fit shrink-0">
+                Módulo III
+            </span>
+        </div>  
+
+        <p class="text-sm text-slate-700 mb-5 text-justify leading-relaxed">
+            Todo modelo computacional de engenharia constitui uma abstração simplificada dos fenômenos físicos reais. 
+            Para garantir a validade técnica da análise e a correta interpretação das grandezas extraídas, é imperativo 
+            delimitar as fronteiras analíticas do simulador utilizado:
+        </p>
+        
+        <table class="w-full text-left border-collapse mb-8 border border-slate-300 shadow-sm">
+            <thead class="bg-slate-50 border-b-2 border-slate-300 text-[11px] uppercase tracking-wider text-slate-700" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;">
+                <tr>
+                    <th class="w-[50%] py-3 px-4 font-bold text-slate-900 align-middle text-center">
+                        Alcance do Modelo
+                    </th>
+                    <th class="w-[50%] py-3 px-4 font-bold text-slate-900 align-middle text-center">
+                        Limitações Físicas
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="text-sm text-slate-700">
+                
+                <!-- Linha 1 -->
+                <tr class="evitar-quebra border-b border-slate-200 hover:bg-slate-50/50 transition-colors">
+                    <td class="p-4 align-top border-r border-slate-200 text-justify">
+                        <strong class="font-sans text-brand-600 text-[11px] uppercase block mb-1 text-left">Demanda de Potência Mecânica</strong>
+                        Quantificação em função da carga inercial e do gradiente topográfico da rampa ($\theta$).
+                    </td>
+                    <td class="p-4 align-top text-justify">
+                        <strong class="font-sans text-rose-600 text-[11px] uppercase block mb-1 text-left">Interação Pneu-Solo (Slip)</strong>
+                        Desconsidera a perda de tração dinâmica e o aumento do atrito gerado pelo afundamento e formação de sulcos profundos no rastro da roda.
+                    </td>
+                </tr>
+                
+                <!-- Linha 2 -->
+                <tr class="evitar-quebra border-b border-slate-200 hover:bg-slate-50/50 transition-colors">
+                    <td class="p-4 align-top border-r border-slate-200 text-justify">
+                        <strong class="font-sans text-brand-600 text-[11px] uppercase block mb-1 text-left">Incremento da Força de Arrasto</strong>
+                        Determinação da energia potencial elástica de flexão associada ao atraso cinemático ($\Delta\alpha$).
+                    </td>
+                    <td class="p-4 align-top text-justify">
+                        <strong class="font-sans text-rose-600 text-[11px] uppercase block mb-1 text-left">Comportamento Não Linear da Treliça</strong>
+                        Modela a rigidez como uma constante elástica linear ($k_{flexional}$), ignorando efeitos complexos como flambagem local e tensões de cisalhamento nas cantoneiras.
+                    </td>
+                </tr>
+                
+                <!-- Linha 3 -->
+                <tr class="evitar-quebra border-b border-slate-200 hover:bg-slate-50/50 transition-colors">
+                    <td class="p-4 align-top border-r border-slate-200 text-justify">
+                        <strong class="font-sans text-brand-600 text-[11px] uppercase block mb-1 text-left">Limiar Crítico de Desarme</strong>
+                        Definição do ponto de corte elétrico provocado pela extrapolação da potência nominal do motoredutor.
+                    </td>
+                    <td class="p-4 align-top text-justify">
+                        <strong class="font-sans text-rose-600 text-[11px] uppercase block mb-1 text-left">Hidrodinâmica Transiente</strong>
+                        Abstrai a inércia do fluido e a oscilação da massa de água no interior do vão durante acelerações, paradas ou solavancos da máquina.
+                    </td>
+                </tr>
+                
+                <!-- Linha 4 -->
+                <tr class="evitar-quebra hover:bg-slate-50/50 transition-colors">
+                    <td class="p-4 align-top border-r border-slate-200 text-justify">
+                        <strong class="font-sans text-brand-600 text-[11px] uppercase block mb-1 text-left">Correlação Quase-Estática</strong>
+                        Estabelecimento da relação direta entre a velocidade linear de avanço ($v$) e a taxa temporal de trabalho exigido.
+                    </td>
+                    <td class="p-4 align-top text-justify">
+                        <strong class="font-sans text-rose-600 text-[11px] uppercase block mb-1 text-left">Variação Térmica do Estator</strong>
+                        Oculta a perda de eficiência mecânica causada pela degradação térmica do enrolamento do motor (Efeito Joule) sob operação contínua em regime de sobrecarga.
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+
+
+
+            </div>
+
+
+
+
+
+
+<!-- ================================================================== -->
+<div class="folha-a4">
+    <!-- ========================================== -->
+    <!-- BLOCO 1: IDENTIFICAÇÃO                     -->
+    <!-- ========================================== -->
+    <div class="border border-slate-300 rounded-xl overflow-hidden mb-6 shadow-sm evitar-quebra">
+        <div class="bg-slate-100 border-b border-slate-300 p-4" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;">
+            <h4 class="font-sans font-bold text-slate-800 uppercase text-sm flex items-center gap-2 tracking-wide">
+                <i data-lucide="shield-check" class="w-4 h-4 text-slate-600"></i> 
+                Identificação do Responsável Técnico
+            </h4>
+            <p class="text-xs text-slate-600 mt-1 sm:pl-6">
+                Preenchimento obrigatório para validação e emissão do laudo executivo.
+            </p>
+        </div>
+        <div class="p-5 bg-white">
+            <div class="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-6">
+                <div class="w-full">
+                    <label class="block mb-1.5 font-sans font-bold text-slate-700 uppercase text-[10px] tracking-wider">
+                        Nome do Perito (Aluno)
+                    </label>
+                    <div class="relative">
+                        <i data-lucide="pen-line" class="absolute left-3 top-2.5 w-4 h-4 text-slate-400 esconder-na-impressao"></i>
+                        <input type="text" class="campo-preenchimento py-2 pl-9 print:pl-3 pr-3 w-full rounded-md" placeholder="Insira o nome completo...">
+                    </div>
+                </div>
+                <div class="w-full">
+                    <label class="block mb-1.5 font-sans font-bold text-slate-700 uppercase text-[10px] tracking-wider">
+                        Matrícula / CREA-Acadêmico
+                    </label>
+                    <div class="relative">
+                        <i data-lucide="hash" class="absolute left-3 top-2.5 w-4 h-4 text-slate-400 esconder-na-impressao"></i>
+                        <input type="text" class="campo-preenchimento py-2 pl-9 print:pl-3 pr-3 w-full rounded-md" placeholder="Ex: 2026.ENG.042">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     
+    <!-- ================================================================== -->
+    <!-- 1. O ESTUDO DE CASO (OCORRÊNCIA DE CAMPO)                          -->
+    <!-- ================================================================== -->
+    <div class="border border-slate-300 rounded-xl overflow-hidden mb-6 shadow-sm evitar-quebra mt-10">
+        
+        <!-- Cabeçalho do Relatório -->
+        <div class="bg-slate-100 border-b border-slate-300 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;">
+            <h4 class="font-sans font-bold text-slate-800 uppercase text-sm flex items-center gap-2 tracking-wide">
+                <i data-lucide="file-warning" class="w-4 h-4 text-slate-600"></i> Relatório de Ocorrência
+            </h4>
+            <span class="font-mono text-xs font-bold text-slate-600 bg-white px-2.5 py-1 rounded border border-slate-300 shadow-sm shrink-0 w-fit">
+                O.S. #4092
+            </span>
+        </div>
+        
+        <!-- Narrativa da Ocorrência -->
+        <div class="p-5 bg-white text-sm text-slate-700 leading-relaxed text-justify border-b border-slate-200">
+            Durante o turno de irrigação noturno no talhão Norte, o painel de segurança detectou uma falha de deslocamento. O pivô encontra-se imobilizado no trecho de maior inclinação do terreno (aclive severo). A equipe de ronda relatou intenso ruído mecânico oriundo do motoredutor da 'Torre 4', imediatamente antes do desarme elétrico total do equipamento.
+        </div>
+
+        <!-- Dados Paramétricos -->
+        <div class="p-5 bg-slate-50">
+            <p class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-4">Dados Paramétricos Levantados em Campo:</p>
+            
+            <ul class="space-y-3">
+                <li class="flex items-start gap-3 bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                    <div class="bg-slate-100 p-1.5 rounded border border-slate-200 shrink-0">
+                        <i data-lucide="weight" class="w-4 h-4 text-slate-600"></i>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed text-justify mt-0.5">
+                        <strong class="text-slate-900">Carga Operacional ($m$):</strong> 
+                        Tubulação pressurizada com vazão de projeto, totalizando massa estrutural e hídrica de $6.5\text{ ton}$ no vão afetado.
+                    </p>
+                </li>
+                <li class="flex items-start gap-3 bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                    <div class="bg-slate-100 p-1.5 rounded border border-slate-200 shrink-0">
+                        <i data-lucide="mountain" class="w-4 h-4 text-slate-600"></i>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed text-justify mt-0.5">
+                        <strong class="text-slate-900">Perturbação Topográfica ($\theta$):</strong> 
+                        Aclive aferido no local da Torre 4 com inclinação de $18^\circ$.
+                    </p>
+                </li>
+                <li class="flex items-start gap-3 bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                    <div class="bg-slate-100 p-1.5 rounded border border-slate-200 shrink-0">
+                        <i data-lucide="move-down-right" class="w-4 h-4 text-slate-600"></i>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed text-justify mt-0.5">
+                        <strong class="text-slate-900">Desvio Geométrico ($\Delta\alpha$):</strong> 
+                        Patinagem gerou atraso severo do rodado, resultando em um desalinhamento elástico de $8^\circ$ em relação ao eixo transversal do pivô.
+                    </p>
+                </li>
+                <li class="flex items-start gap-3 bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                    <div class="bg-slate-100 p-1.5 rounded border border-slate-200 shrink-0">
+                        <i data-lucide="zap" class="w-4 h-4 text-slate-600"></i>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed text-justify mt-0.5">
+                        <strong class="text-slate-900">Limite Eletromecânico ($Pot_{nominal}$):</strong> 
+                        Motoredutor instalado possui potência nominal limite de projeto de $1.50\text{ kW}$.
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ================================================================== -->
+    <!-- 2. FORMULÁRIO DE DIAGNÓSTICO PERICIAL                              -->
+    <!-- ================================================================== -->
+    <div class="bg-brand-50 border-l-4 border-brand-500 rounded-r-lg p-4 mb-8 shadow-sm print:border-slate-500 print:bg-slate-50">
+        <h3 class="font-sans font-bold text-sm uppercase text-slate-800 mb-1 flex items-center gap-2">
+            <i data-lucide="microscope" class="w-4 h-4 text-brand-600 print:text-slate-700"></i> Procedimento de Diagnóstico
+        </h3>
+        <p class="text-sm text-slate-700 text-justify leading-relaxed">
+            Parametrize o modelo computacional (Módulo II) utilizando os dados operacionais extraídos da Ordem de Serviço. 
+            Analise as grandezas dinâmicas computadas pelo simulador e consolide sua tomada de decisão preenchendo o laudo executivo a seguir em suas 5 etapas.
+        </p>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SEÇÃO A: LEITURA DE DADOS                  -->
+    <!-- ========================================== -->
+    <div class="flex items-center gap-3 border-b-2 border-slate-200 pb-2 mb-4 mt-8">
+        <span class="bg-slate-800 text-white font-sans font-bold text-xs px-2.5 py-1 rounded shadow-sm" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;">A</span>
+        <h3 class="font-sans font-bold text-sm uppercase text-slate-800 tracking-wide">Leitura de Dados (Resultados da Simulação)</h3>
+    </div>
+    
+    <p class="text-sm text-slate-700 mb-5">Preencha com os valores exatos extraídos do painel para embasar sua decisão técnica.</p>
+    
+    <table class="w-full text-left border-collapse border border-slate-300 mb-8 shadow-sm">
+        <thead class="bg-slate-100 text-[10px] uppercase tracking-wider text-slate-700" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;">
+            <tr>
+                <th class="w-[60%] py-3 px-4 border border-slate-300">Parâmetro Físico</th>
+                <th class="w-[40%] py-3 px-4 text-center border border-slate-300">Valor Aferido no Simulador</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="evitar-quebra">
+                <td class="p-4 border border-slate-300 align-middle">
+                    <strong class="text-sm text-slate-800 block">Trabalho / Força contra a Gravidade</strong>
+                </td>
+                <td class="p-3 border border-slate-300 align-middle">
+                    <div class="flex items-center gap-2">
+                        <input type="text" class="campo-preenchimento w-full text-center py-2.5 rounded" placeholder="____">
+                        <span class="text-xs text-slate-600 font-bold font-mono">kN</span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="evitar-quebra bg-slate-50/50">
+                <td class="p-4 border border-slate-300 align-middle">
+                    <strong class="text-sm text-slate-800 block">Força de Arrasto por Deformação</strong>
+                </td>
+                <td class="p-3 border border-slate-300 align-middle">
+                    <div class="flex items-center gap-2">
+                        <input type="text" class="campo-preenchimento w-full text-center py-2.5 rounded" placeholder="____">
+                        <span class="text-xs text-slate-600 font-bold font-mono">kN</span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="evitar-quebra">
+                <td class="p-4 border border-slate-300 align-middle">
+                    <strong class="text-sm text-slate-800 block">Potência Mecânica Exigida</strong>
+                </td>
+                <td class="p-3 border border-slate-300 align-middle">
+                    <div class="flex items-center gap-2">
+                        <input type="text" class="campo-preenchimento w-full text-center py-2.5 rounded" placeholder="____">
+                        <span class="text-xs text-slate-600 font-bold font-mono">kW</span>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ========================================== -->
+    <!-- SEÇÃO B: DIAGNÓSTICO DO STATUS             -->
+    <!-- ========================================== -->
+    <div class="flex items-center gap-3 border-b-2 border-slate-200 pb-2 mb-4 mt-8">
+        <span class="bg-slate-800 text-white font-sans font-bold text-xs px-2.5 py-1 rounded shadow-sm" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;">B</span>
+        <h3 class="font-sans font-bold text-sm uppercase text-slate-800 tracking-wide">Diagnóstico do Status Operacional</h3>
+    </div>
+    
+    <p class="text-sm text-slate-700 mb-5">Com base nos dados aferidos, assinale a condição de contorno atual do equipamento.</p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-sans mb-8">
+        <!-- Opção 1 -->
+        <label class="group flex items-start gap-4 p-5 bg-white border border-slate-300 rounded-xl cursor-pointer hover:border-emerald-500 hover:shadow-md transition-all shadow-sm evitar-quebra">
+            <input type="radio" name="status_operacional" class="mt-1 w-5 h-5 accent-emerald-600 shrink-0">
+            <div class="flex flex-col">
+                <strong class="text-slate-900 uppercase text-sm tracking-wide mb-1 group-hover:text-emerald-700 transition-colors">REGIME NOMINAL <span class="text-slate-500 capitalize font-normal text-xs">(Estável)</span></strong> 
+                <span class="text-slate-600 text-xs leading-relaxed text-justify">Demanda de potência e alinhamento cinemático operando dentro das margens teóricas de segurança.</span>
+            </div>
+        </label>
+        
+        <!-- Opção 2 -->
+        <label class="group flex items-start gap-4 p-5 bg-white border border-slate-300 rounded-xl cursor-pointer hover:border-amber-500 hover:shadow-md transition-all shadow-sm evitar-quebra">
+            <input type="radio" name="status_operacional" class="mt-1 w-5 h-5 accent-amber-600 shrink-0">
+            <div class="flex flex-col">
+                <strong class="text-slate-900 uppercase text-sm tracking-wide mb-1 group-hover:text-amber-700 transition-colors">RISCO ESTRUTURAL <span class="text-slate-500 capitalize font-normal text-xs">(Flexão)</span></strong> 
+                <span class="text-slate-600 text-xs leading-relaxed text-justify">Potência mecânica tolerável, porém com elevada energia elástica acumulada. Iminência de deformação plástica da treliça.</span>
+            </div>
+        </label>
+        
+        <!-- Opção 3 -->
+        <label class="group flex items-start gap-4 p-5 bg-white border border-slate-300 rounded-xl cursor-pointer hover:border-orange-500 hover:shadow-md transition-all shadow-sm evitar-quebra">
+            <input type="radio" name="status_operacional" class="mt-1 w-5 h-5 accent-orange-600 shrink-0">
+            <div class="flex flex-col">
+                <strong class="text-slate-900 uppercase text-sm tracking-wide mb-1 group-hover:text-orange-700 transition-colors">SOBRECARGA <span class="text-slate-500 capitalize font-normal text-xs">(Eletromecânica)</span></strong> 
+                <span class="text-slate-600 text-xs leading-relaxed text-justify">A taxa de trabalho exigida superou a capacidade do motoredutor, induzindo falha por aquecimento térmico do estator.</span>
+            </div>
+        </label>
+        
+        <!-- Opção 4 -->
+        <label class="group flex items-start gap-4 p-5 bg-white border border-slate-300 rounded-xl cursor-pointer hover:border-rose-500 hover:shadow-md transition-all shadow-sm evitar-quebra">
+            <input type="radio" name="status_operacional" class="mt-1 w-5 h-5 accent-rose-600 shrink-0">
+            <div class="flex flex-col">
+                <strong class="text-slate-900 uppercase text-sm tracking-wide mb-1 group-hover:text-rose-700 transition-colors">COLAPSO SISTÊMICO <span class="text-slate-500 capitalize font-normal text-xs">(Crítico)</span></strong> 
+                <span class="text-slate-600 text-xs leading-relaxed text-justify">Limites de potência nominal e de escoamento estrutural rompidos simultaneamente. Falha crítica multivariável.</span>
+            </div>
+        </label>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SEÇÃO C: ANÁLISE CRÍTICA                   -->
+    <!-- ========================================== -->
+    <div class="flex items-center gap-3 border-b-2 border-slate-200 pb-2 mb-4 mt-8">
+        <span class="bg-slate-800 text-white font-sans font-bold text-xs px-2.5 py-1 rounded shadow-sm" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;">C</span>
+        <h3 class="font-sans font-bold text-sm uppercase text-slate-800 tracking-wide">Análise Crítica e Limites do Modelo</h3>
+    </div>
+
+    <div class="mb-8 evitar-quebra bg-white p-5 border border-slate-300 rounded-xl shadow-sm">
+        <p class="text-sm text-slate-700 mb-4 text-justify leading-relaxed">
+            <strong>Desafio Cognitivo de Engenharia:</strong> Todo simulador é uma simplificação da realidade. Considerando que a presente modelagem computacional assume como premissas simplificatórias uma velocidade linear constante ($v$), um coeficiente de atrito pneu-solo isotrópico e um comportamento de arrasto estrutural estritamente elástico-linear, discorra: <strong>quais fenômenos dinâmicos e perturbações ambientais inerentes à operação real de campo poderiam precipitar a falha sistêmica do equipamento, mas que foram deliberadamente abstraídos desta simulação?</strong>
+        </p>
+        <textarea class="campo-preenchimento w-full h-40 p-4 text-sm rounded-lg" placeholder="Sua dissertação analítica aqui..."></textarea>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SEÇÃO D: MATRIZ DE DECISÃO                 -->
+    <!-- ========================================== -->
+    <div class="flex items-center gap-3 border-b-2 border-slate-200 pb-2 mb-4 mt-8">
+        <span class="bg-slate-800 text-white font-sans font-bold text-xs px-2.5 py-1 rounded shadow-sm" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;">D</span>
+        <h3 class="font-sans font-bold text-sm uppercase text-slate-800 tracking-wide">Matriz de Avaliação de Cenários (Mitigação)</h3>
+    </div>
+
+    <p class="text-sm text-slate-700 mb-5 text-justify leading-relaxed">
+        A mitigação da anomalia exige intervenção imediata. O orçamento da obra está contingenciado e o cronograma permite embargo máximo de 48 horas. Utilize o simulador para testar e validar os cenários abaixo, assinalando a intervenção técnica mais adequada:
+    </p>
+    
+    <div class="space-y-4 mb-8 font-sans">
+        <!-- Opção A -->
+        <label class="group flex items-start gap-4 p-5 bg-white border border-slate-300 rounded-xl cursor-pointer hover:border-brand-500 hover:shadow-md transition-all shadow-sm evitar-quebra">
+            <input type="radio" name="mitigacao" class="mt-1 w-5 h-5 accent-brand-600 shrink-0">
+            <div class="w-full">
+                <strong class="text-slate-900 text-sm block mb-2 group-hover:text-brand-700 transition-colors">Opção A (Intervenção Operacional): Drenagem parcial e redução da carga hídrica na rampa.</strong> 
+                <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs text-slate-700 space-y-2">
+                    <span class="flex items-start gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600 shrink-0 print:text-slate-800"></i> <b>Pró:</b> Custo zero e ação imediata. Alivia substancialmente o vetor peso na subida.</span>
+                    <span class="flex items-start gap-2"><i data-lucide="x-circle" class="w-4 h-4 text-rose-600 shrink-0 print:text-slate-800"></i> <b>Contra:</b> Reduz a lâmina d'água aplicada, gerando estresse hídrico pontual no talhão afetado.</span>
+                </div>
+            </div>
+        </label>
+
+        <!-- Opção B -->
+        <label class="group flex items-start gap-4 p-5 bg-white border border-slate-300 rounded-xl cursor-pointer hover:border-brand-500 hover:shadow-md transition-all shadow-sm evitar-quebra">
+            <input type="radio" name="mitigacao" class="mt-1 w-5 h-5 accent-brand-600 shrink-0">
+            <div class="w-full">
+                <strong class="text-slate-900 text-sm block mb-2 group-hover:text-brand-700 transition-colors">Opção B (Retrofit Mecânico): Substituição dos motoredutores da Torre 4 por modelos de alta potência (High Torque).</strong> 
+                <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs text-slate-700 space-y-2">
+                    <span class="flex items-start gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600 shrink-0 print:text-slate-800"></i> <b>Pró:</b> Solução mecânica definitiva que restabelece a capacidade de irrigação nominal em qualquer terreno.</span>
+                    <span class="flex items-start gap-2"><i data-lucide="x-circle" class="w-4 h-4 text-rose-600 shrink-0 print:text-slate-800"></i> <b>Contra:</b> Alto custo de aquisição (Capex) e paralisação do equipamento (Downtime) superior a 48h.</span>
+                </div>
+            </div>
+        </label>
+
+        <!-- Opção C -->
+        <label class="group flex items-start gap-4 p-5 bg-white border border-slate-300 rounded-xl cursor-pointer hover:border-brand-500 hover:shadow-md transition-all shadow-sm evitar-quebra">
+            <input type="radio" name="mitigacao" class="mt-1 w-5 h-5 accent-brand-600 shrink-0">
+            <div class="w-full">
+                <strong class="text-slate-900 text-sm block mb-2 group-hover:text-brand-700 transition-colors">Opção C (Intervenção Topográfica): Sistematização de solo no talhão Norte para suavizar a rampa.</strong> 
+                <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs text-slate-700 space-y-2">
+                    <span class="flex items-start gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600 shrink-0 print:text-slate-800"></i> <b>Pró:</b> Elimina a raiz fenomenológica do problema mecânico (o ângulo extremo $\theta$).</span>
+                    <span class="flex items-start gap-2"><i data-lucide="x-circle" class="w-4 h-4 text-rose-600 shrink-0 print:text-slate-800"></i> <b>Contra:</b> Exige maquinário pesado, altíssimo custo, destruição da cultura local e intervenção ambiental.</span>
+                </div>
+            </div>
+        </label>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SEÇÃO E: DEFESA E JUSTIFICATIVA            -->
+    <!-- ========================================== -->
+    <div class="flex items-center gap-3 border-b-2 border-slate-200 pb-2 mb-4 mt-8">
+        <span class="bg-slate-800 text-white font-sans font-bold text-xs px-2.5 py-1 rounded shadow-sm" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;">E</span>
+        <h3 class="font-sans font-bold text-sm uppercase text-slate-800 tracking-wide">Plano de Execução e Defesa Técnica</h3>
+    </div>
+    
+    <p class="text-sm text-slate-700 mb-5 text-justify leading-relaxed">
+        Com base na alternativa selecionada na <strong>Seção D</strong>, redija seu laudo final defendendo tecnicamente a sua escolha. Justifique a viabilidade da intervenção relacionando a redução das grandezas físicas (potência, força, atraso) com os impactos operacionais do mundo real (custos, limite de 48h de embargo, e perdas agronômicas).
+    </p>
+    
+    <div class="mb-10 evitar-quebra bg-white p-5 border border-slate-300 rounded-xl shadow-sm">
+        <textarea class="campo-preenchimento w-full h-48 p-4 text-sm rounded-lg" placeholder="Sua defesa técnica de engenharia e roteiro de execução aqui..."></textarea>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <script>
         lucide.createIcons();
     </script>
